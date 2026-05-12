@@ -1,0 +1,63 @@
+---
+layout: base.njk
+title: Galactic Panic
+description: ""
+---
+
+<section class="hero">
+  <div class="hero-eyebrow">Galactic Panic · Est. 2026</div>
+  <h1 class="hero-title">{{ artist.name }}</h1>
+  <p class="hero-tagline">{{ artist.tagline }}</p>
+</section>
+
+{% set songs = collections.songs %}
+{% set latest = songs[0] %}
+
+{% if latest %}
+<section class="latest-release">
+  <div class="latest-release-art">
+    {% if latest.cover_url %}
+      <img src="{{ latest.cover_url }}" alt="{{ latest.title }} cover">
+    {% else %}
+      <div class="latest-release-art-placeholder">{{ latest.title }}</div>
+    {% endif %}
+  </div>
+  <div>
+    <div class="latest-release-meta">Latest release · {{ latest.latest_release_date | prettyDate }}</div>
+    <h2>{{ latest.title }}</h2>
+    {% if latest.story %}<p>{{ latest.story }}</p>{% endif %}
+    <div class="song-listen">
+      {% if latest.spotify_url %}<a href="{{ latest.spotify_url }}">Spotify</a>{% endif %}
+      {% if latest.bandcamp_url %}<a href="{{ latest.bandcamp_url }}">Bandcamp</a>{% endif %}
+      <a href="/songs/{{ latest.slug }}/">More about this song</a>
+    </div>
+  </div>
+</section>
+{% else %}
+<section class="empty-state">
+  No releases yet. Check back soon.
+</section>
+{% endif %}
+
+{% if songs.length > 1 %}
+<section>
+  <h2>More music</h2>
+  <div class="songs-grid">
+    {% for song in songs.slice(1, 7) %}
+      <a href="/songs/{{ song.slug }}/" class="song-card">
+        <div class="song-card-art">
+          {% if song.cover_url %}<img src="{{ song.cover_url }}" alt="">{% endif %}
+        </div>
+        <div class="song-card-body">
+          <div class="song-card-title">{{ song.title }}</div>
+          <div class="song-card-meta">
+            {{ song.latest_release_date | prettyDate }}
+            {% if song.has_pro_version %}<span class="song-card-tag">Spotify</span>{% endif %}
+            {% if song.has_home_version and not song.has_pro_version %}<span class="song-card-tag">Bandcamp</span>{% endif %}
+          </div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}

@@ -1,0 +1,586 @@
+/*
+ * Keegan Quigley Music — site styles
+ *
+ * Aesthetic direction: garage rock zine / 70s concert poster.
+ * Warm off-white paper background, deep oxblood accent, serif-led typography
+ * with monospace for utility text. Vintage border frame, halftone grain,
+ * ornamental dividers, sunburst hero.
+ */
+
+:root {
+  --paper: #f3eee4;
+  --ink: #1a1715;
+  --ink-soft: #5a544c;
+  --rule: #d8d0c2;
+  --accent: #7a1f1f;          /* oxblood */
+  --accent-bright: #c44a2c;   /* rust */
+  --highlight: #f0c869;       /* faded yellow, for marker effect */
+
+  /* 70s palette additions */
+  --burnt-orange: #d4742c;
+  --avocado: #6b7a2f;
+  --deep-brown: #3d2b1f;
+  --mustard: #c9a834;
+  --olive: #5c5c30;
+
+  --font-display: "Old Standard TT", Georgia, serif;
+  --font-body: "Old Standard TT", Georgia, serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+
+  --measure: 64ch;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.6;
+  /* flat matte paper — no grain or dots */
+}
+
+/* ---------- Vintage page border frame ---------- */
+
+body {
+  border: 3px solid var(--deep-brown);
+  outline: 1px solid var(--rule);
+  outline-offset: 6px;
+  min-height: 100vh;
+  position: relative;
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 1px solid var(--rule);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  transition: color 0.15s ease;
+}
+a:hover { color: var(--burnt-orange); }
+
+/* ---------- Header ---------- */
+
+.site-header {
+  border-bottom: 3px double var(--ink);
+  padding: 1.25rem 0;
+  margin-bottom: 3rem;
+}
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.brand {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  border: none;
+}
+.brand-divider { margin: 0 0.4em; color: var(--ink-soft); font-weight: 400; }
+.brand-tag {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+.site-nav {
+  display: flex;
+  gap: 1.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.site-nav a {
+  color: var(--ink);
+  border: none;
+  padding-bottom: 2px;
+}
+.site-nav a:hover {
+  color: var(--burnt-orange);
+  border-bottom: 2px solid var(--burnt-orange);
+}
+
+/* ---------- Main ---------- */
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 2.5rem 0 1rem;
+}
+h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  letter-spacing: -0.02em;
+  margin-top: 0;
+}
+h2 {
+  font-size: 2rem;
+  border-bottom: none;
+  padding-bottom: 0.5rem;
+  position: relative;
+}
+/* ornamental divider under h2 */
+h2::after {
+  content: "✦ ✦ ✦";
+  display: block;
+  font-size: 0.6rem;
+  letter-spacing: 0.6em;
+  color: var(--burnt-orange);
+  margin-top: 0.6rem;
+}
+h3 { font-size: 1.4rem; }
+
+p { max-width: var(--measure); margin: 0 0 1.25rem; }
+
+/* ---------- Hero (homepage) ---------- */
+
+.hero {
+  padding: 3rem 0 4rem;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+  /* ornamental bottom border */
+  border-bottom: none;
+}
+/* retro ornamental divider below hero */
+.hero::after {
+  content: "◆ ─────── ◈ ─────── ◆";
+  display: block;
+  text-align: center;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: var(--burnt-orange);
+  margin-top: 2.5rem;
+  opacity: 0.7;
+}
+/* sunburst behind hero title */
+.hero-title {
+  margin: 0 0 1.5rem;
+  position: relative;
+}
+.hero-title::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  width: 500px;
+  height: 500px;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from 0deg,
+    var(--highlight) 0deg,
+    transparent 8deg,
+    transparent 12deg,
+    var(--highlight) 20deg,
+    transparent 28deg,
+    transparent 32deg,
+    var(--highlight) 40deg,
+    transparent 48deg,
+    transparent 52deg,
+    var(--highlight) 60deg,
+    transparent 68deg,
+    transparent 72deg,
+    var(--highlight) 80deg,
+    transparent 88deg,
+    transparent 92deg,
+    var(--highlight) 100deg,
+    transparent 108deg,
+    transparent 112deg,
+    var(--highlight) 120deg,
+    transparent 128deg,
+    transparent 132deg,
+    var(--highlight) 140deg,
+    transparent 148deg,
+    transparent 152deg,
+    var(--highlight) 160deg,
+    transparent 168deg,
+    transparent 172deg,
+    var(--highlight) 180deg,
+    transparent 188deg,
+    transparent 192deg,
+    var(--highlight) 200deg,
+    transparent 208deg,
+    transparent 212deg,
+    var(--highlight) 220deg,
+    transparent 228deg,
+    transparent 232deg,
+    var(--highlight) 240deg,
+    transparent 248deg,
+    transparent 252deg,
+    var(--highlight) 260deg,
+    transparent 268deg,
+    transparent 272deg,
+    var(--highlight) 280deg,
+    transparent 288deg,
+    transparent 292deg,
+    var(--highlight) 300deg,
+    transparent 308deg,
+    transparent 312deg,
+    var(--highlight) 320deg,
+    transparent 328deg,
+    transparent 332deg,
+    var(--highlight) 340deg,
+    transparent 348deg,
+    transparent 352deg
+  );
+  opacity: 0.08;
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+}
+.hero-title h1,
+.hero h1 {
+  position: relative;
+  z-index: 1;
+}
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+.hero-tagline {
+  font-size: 1.4rem;
+  font-style: italic;
+  color: var(--ink-soft);
+  max-width: 28ch;
+  line-height: 1.4;
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Latest release block ---------- */
+
+.latest-release {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 3rem;
+  align-items: start;
+  margin: 3rem 0;
+}
+.latest-release-art {
+  aspect-ratio: 1;
+  background: var(--ink);
+  border: 2px solid var(--ink);
+  position: relative;
+  overflow: hidden;
+  /* worn edge effect */
+  box-shadow:
+    3px 3px 0 var(--deep-brown),
+    6px 6px 0 rgba(61, 43, 31, 0.15);
+}
+.latest-release-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.latest-release-art-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.latest-release-meta {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  margin-bottom: 0.75rem;
+}
+.latest-release h2 {
+  border: none;
+  margin: 0 0 1rem;
+  padding: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+.latest-release h2::after { display: none; }
+
+@media (max-width: 720px) {
+  .latest-release { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+/* ---------- Songs list ---------- */
+
+.songs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+.song-card {
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  display: block;
+  color: var(--ink);
+  border-bottom: 2px solid var(--ink);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  /* worn edge effect */
+  box-shadow: 3px 3px 0 var(--deep-brown);
+}
+.song-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow:
+    6px 6px 0 var(--deep-brown),
+    8px 8px 0 rgba(61, 43, 31, 0.1);
+  color: var(--ink);
+}
+.song-card-art {
+  aspect-ratio: 1;
+  background: var(--ink);
+  display: block;
+}
+.song-card-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.song-card-body {
+  padding: 1rem 1.25rem 1.25rem;
+  border-top: 1px solid var(--ink);
+}
+.song-card-title {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+}
+.song-card-meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+}
+.song-card-tag {
+  display: inline-block;
+  background: var(--mustard);
+  color: var(--ink);
+  padding: 1px 6px;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  margin-left: 0.4em;
+}
+
+/* ---------- Song detail ---------- */
+
+.song-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: 3rem;
+  align-items: start;
+  margin: 2rem 0 4rem;
+}
+.song-detail-art {
+  aspect-ratio: 1;
+  border: 2px solid var(--ink);
+  overflow: hidden;
+  box-shadow:
+    3px 3px 0 var(--deep-brown),
+    6px 6px 0 rgba(61, 43, 31, 0.15);
+}
+.song-detail-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.song-detail-meta {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+  margin-bottom: 1rem;
+}
+.song-detail h1 { margin-top: 0; }
+.song-listen {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+.song-listen a {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.song-listen a:hover {
+  background: var(--burnt-orange);
+  color: var(--paper);
+  border-color: var(--burnt-orange);
+}
+.song-credits {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+}
+.song-credits dt {
+  display: inline-block;
+  width: 8em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.song-credits dd {
+  display: inline;
+  margin: 0;
+}
+.song-credits dd::after { content: ""; display: block; }
+
+@media (max-width: 720px) {
+  .song-detail { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  margin-top: 6rem;
+  padding: 2.5rem 0 2rem;
+  background: var(--deep-brown);
+  color: var(--paper);
+  /* retro double-rule top border */
+  border-top: 4px double var(--mustard);
+  position: relative;
+}
+/* decorative corner ornaments */
+.site-footer::before,
+.site-footer::after {
+  font-size: 1.2rem;
+  color: var(--mustard);
+  position: absolute;
+  top: 1rem;
+  opacity: 0.6;
+}
+.site-footer::before {
+  content: "✦";
+  left: 2rem;
+}
+.site-footer::after {
+  content: "✦";
+  right: 2rem;
+}
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.footer-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--highlight);
+}
+.footer-links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.footer-links a {
+  color: var(--paper);
+  border-bottom-color: var(--mustard);
+}
+.footer-links a:hover {
+  color: var(--highlight);
+}
+.footer-meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: rgba(243, 238, 228, 0.6);
+  margin-top: 1rem;
+}
+
+/* ---------- Utilities ---------- */
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-soft);
+}
+.empty-state {
+  padding: 4rem 2rem;
+  text-align: center;
+  border: 2px dashed var(--burnt-orange);
+  color: var(--ink-soft);
+  font-style: italic;
+  position: relative;
+}
+/* corner ornaments on empty state */
+.empty-state::before {
+  content: "◆";
+  position: absolute;
+  top: 0.5rem;
+  left: 1rem;
+  color: var(--burnt-orange);
+  opacity: 0.4;
+  font-size: 0.7rem;
+}
+.empty-state::after {
+  content: "◆";
+  position: absolute;
+  bottom: 0.5rem;
+  right: 1rem;
+  color: var(--burnt-orange);
+  opacity: 0.4;
+  font-size: 0.7rem;
+}

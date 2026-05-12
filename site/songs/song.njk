@@ -1,0 +1,63 @@
+---
+layout: base.njk
+pagination:
+  data: collections.songs
+  size: 1
+  alias: song
+permalink: "/songs/{{ song.slug }}/"
+eleventyComputed:
+  title: "{{ song.title }}"
+  description: "{% if song.story %}{{ song.story }}{% else %}{{ artist.tagline }}{% endif %}"
+---
+
+<article class="song-detail">
+  <div class="song-detail-art">
+    {% if song.cover_url %}
+      <img src="{{ song.cover_url }}" alt="{{ song.title }} cover">
+    {% endif %}
+  </div>
+  <div>
+    <div class="song-detail-meta">
+      {% if song.latest_release_date %}Released {{ song.latest_release_date | prettyDate }}{% else %}Unreleased{% endif %}
+      {% if song.bpm %} · {{ song.bpm }} BPM{% endif %}
+      {% if song.key %} · {{ song.key }}{% endif %}
+    </div>
+    <h1>{{ song.title }}</h1>
+
+    {% if song.story %}
+      <p>{{ song.story }}</p>
+    {% endif %}
+
+    <div class="song-listen">
+      {% if song.spotify_url %}<a href="{{ song.spotify_url }}">Spotify</a>{% endif %}
+      {% if song.bandcamp_url %}<a href="{{ song.bandcamp_url }}">Bandcamp</a>{% endif %}
+    </div>
+
+    {% if song.instruments_played and song.instruments_played.length > 0 %}
+      <p class="eyebrow" style="margin-top: 2rem;">
+        Instruments: {{ song.instruments_played | join(", ") }}
+      </p>
+    {% endif %}
+
+    {% if song.credits %}
+      <dl class="song-credits">
+        {% if song.credits.writing %}
+          <dt>Writing</dt><dd>{{ song.credits.writing }}</dd>
+        {% endif %}
+        {% if song.credits.performance %}
+          <dt>Performance</dt><dd>{{ song.credits.performance }}</dd>
+        {% endif %}
+        {% if song.credits.mix_pro %}
+          <dt>Mix</dt><dd>{{ song.credits.mix_pro }}</dd>
+        {% elif song.credits.mix_home %}
+          <dt>Mix</dt><dd>{{ song.credits.mix_home }}</dd>
+        {% endif %}
+        {% if song.credits.master %}
+          <dt>Master</dt><dd>{{ song.credits.master }}</dd>
+        {% endif %}
+      </dl>
+    {% endif %}
+  </div>
+</article>
+
+<p style="margin-top: 3rem;"><a href="/music/">← All music</a></p>

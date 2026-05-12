@@ -1,0 +1,37 @@
+---
+layout: base.njk
+title: Press
+permalink: /press/
+---
+
+<h1>Press</h1>
+
+<p class="eyebrow">For journalists, playlist curators, and venue bookers</p>
+
+<h2>Short bio</h2>
+<p>
+  Keegan Quigley is a multi-instrumentalist solo project. Guitar, bass, drums,
+  vocals — all performed by one person. Indie rock with garage and stoner rock
+  leanings, recorded at home with intention rather than polish.
+</p>
+
+<h2>Press photos</h2>
+<p>
+  High-resolution press photos available on request. Email
+  <a href="{{ artist.links.email }}">{{ artist.links.email | replace('mailto:', '') }}</a>.
+</p>
+
+<h2>Booking and licensing</h2>
+<p>
+  For booking, sync licensing, or interview requests, email
+  <a href="{{ artist.links.email }}">{{ artist.links.email | replace('mailto:', '') }}</a>
+  with the subject line clearly indicating the inquiry type.
+</p>
+
+<h2>Streaming and social</h2>
+<ul>
+  {% if artist.links.bandcamp %}<li><a href="{{ artist.links.bandcamp }}">Bandcamp</a></li>{% endif %}
+  {% if artist.links.spotify %}<li><a href="{{ artist.links.spotify }}">Spotify</a></li>{% endif %}
+  {% if artist.links.youtube %}<li><a href="{{ artist.links.youtube }}">YouTube</a></li>{% endif %}
+  {% if artist.links.instagram %}<li><a href="{{ artist.links.instagram }}">Instagram</a></li>{% endif %}
+</ul>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if title %}{{ title }} — {% endif %}{{ artist.project }}</title>
+  <meta name="description" content="{% if description %}{{ description }}{% else %}{{ artist.tagline }}{% endif %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="brand">
+        <span class="brand-name">{{ artist.name }}</span>
+        <span class="brand-divider">·</span>
+        <span class="brand-tag">music</span>
+      </a>
+      <nav class="site-nav">
+        <a href="/">Home</a>
+        <a href="/music/">Music</a>
+        <a href="/about/">About</a>
+        <a href="/press/">Press</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    {{ content | safe }}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-name">{{ artist.project }}</div>
+      <div class="footer-links">
+        {% if artist.links.bandcamp %}<a href="{{ artist.links.bandcamp }}">Bandcamp</a>{% endif %}
+        {% if artist.links.spotify %}<a href="{{ artist.links.spotify }}">Spotify</a>{% endif %}
+        {% if artist.links.instagram %}<a href="{{ artist.links.instagram }}">Instagram</a>{% endif %}
+        {% if artist.links.youtube %}<a href="{{ artist.links.youtube }}">YouTube</a>{% endif %}
+        {% if artist.links.email %}<a href="{{ artist.links.email }}">Email</a>{% endif %}
+      </div>
+      <div class="footer-meta">© {{ currentYear }} {{ artist.name }}.</div>
+    </div>
+  </footer>
+</body>
+</html>

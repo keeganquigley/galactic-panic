@@ -1,0 +1,16 @@
+{
+  "name": "galactic-panic",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Website and content asset generation for Galactic Panic",
+  "scripts": {
+    "dev": "eleventy --serve",
+    "build": "eleventy",
+    "clean": "rm -rf site/_site",
+    "generate-all": "./scripts/generate-all.sh",
+    "prepare-stems": "./scripts/prepare-stems-package.sh"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}

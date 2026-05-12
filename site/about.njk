@@ -1,0 +1,40 @@
+---
+layout: base.njk
+title: About
+permalink: /about/
+---
+
+<h1>About</h1>
+
+<p>
+  Keegan Quigley Music is a multi-instrumentalist solo project. Every guitar,
+  bass, drum, and vocal track on every release is performed by Keegan.
+</p>
+
+<p>
+  The songs sit somewhere between garage rock immediacy, stoner rock weight,
+  and the kind of personal indie rock songwriting that prioritizes feel over
+  polish. Real instruments, played by hand, by one person — a rarity in
+  2026's algorithm-shaped music landscape.
+</p>
+
+<p>
+  The first batch of recordings — <em>Bedroom Demos Vol. 1</em> — was made
+  entirely at home, without a studio, in the tradition of artists like Mac
+  DeMarco and early Ty Segall. Polished, professionally-mixed versions of the
+  strongest tracks follow as Spotify singles. Until then, the home recordings
+  live on Bandcamp where they belong.
+</p>
+
+<h2>Contact</h2>
+<p>
+  For licensing, press, or anything else: <a href="{{ artist.links.email }}">{{ artist.links.email | replace('mailto:', '') }}</a>
+</p>
+
+<h2>Where to find the music</h2>
+<ul>
+  {% if artist.links.bandcamp %}<li><a href="{{ artist.links.bandcamp }}">Bandcamp</a></li>{% endif %}
+  {% if artist.links.spotify %}<li><a href="{{ artist.links.spotify }}">Spotify</a></li>{% endif %}
+  {% if artist.links.youtube %}<li><a href="{{ artist.links.youtube }}">YouTube</a></li>{% endif %}
+  {% if artist.links.instagram %}<li><a href="{{ artist.links.instagram }}">Instagram</a></li>{% endif %}
+</ul>
