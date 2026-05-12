@@ -73,7 +73,7 @@ ffmpeg -y -i "$HOME_MIX" -codec:a libmp3lame -b:a 320k \
 cat > "${PACKAGE_DIR}/README.md" <<EOF
 # ${TITLE} — stems for mix
 
-Artist: Keegan Quigley
+Artist: Galactic Panic
 Song: ${TITLE}
 Slug: ${SLUG}
 BPM: ${BPM}
@@ -96,8 +96,7 @@ $(ls "${PACKAGE_DIR}/stems" | sort | sed 's/^/- /')
 (Edit this section before sending — describe the vibe, references, and any
 specific things you want for this song.)
 
-**Vibe:** Garage / stoner rock — Ty Segall, Queens of the Stone Age territory.
-Real-instruments-played-by-one-person aesthetic. Don't over-polish.
+**Vibe:** [describe the vibe and reference artists]
 
 **Reference tracks:** [add 2–3 reference songs the engineer should listen to]
 
@@ -115,7 +114,7 @@ Real-instruments-played-by-one-person aesthetic. Don't over-polish.
 
 ## Contact
 
-Keegan Quigley
+Galactic Panic
 [your email]
 EOF
 
