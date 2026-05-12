@@ -5,9 +5,10 @@ description: ""
 ---
 
 <section class="hero">
-  <div class="hero-eyebrow">Galactic Panic · Est. 2026</div>
+  <div class="hero-eyebrow">/// incoming transmission /// est. 2026</div>
+  <svg class="saucer-icon" viewBox="0 0 64 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-bottom: 1rem; opacity: 0.6;"><ellipse cx="32" cy="18" rx="30" ry="10" fill="currentColor" opacity="0.3"/><ellipse cx="32" cy="16" rx="22" ry="7" fill="currentColor" opacity="0.5"/><ellipse cx="32" cy="13" rx="10" ry="6" fill="currentColor" opacity="0.7"/></svg>
   <h1 class="hero-title">{{ artist.name }}</h1>
-  <p class="hero-tagline">{{ artist.tagline }}</p>
+  <p class="hero-tagline">{% if artist.tagline %}{{ artist.tagline }}{% else %}Do not adjust your receiver.{% endif %}</p>
 </section>
 
 {% set songs = collections.songs %}
@@ -38,6 +39,8 @@ description: ""
   No releases yet. Check back soon.
 </section>
 {% endif %}
+
+<div class="saucer-divider">─── ◇ ─── ◆ ─── ◇ ───</div>
 
 {% if songs.length > 1 %}
 <section>

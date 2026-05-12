@@ -4,10 +4,10 @@ module.exports = {
   domain: "galacticpanic.com",
   tagline: "",
   links: {
-    bandcamp: "",
+    bandcamp: "https://galacticpanic.bandcamp.com",
     spotify: "",
-    instagram: "",
+    instagram: "https://instagram.com/galacticpanic",
     youtube: "",
-    email: ""
+    email: "mailto:galacticpanic@example.com"
   }
 };
