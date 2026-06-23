@@ -3,7 +3,7 @@
 The infrastructure repo for Galactic Panic — content asset generation for
 releases, plus the band website.
 
-**Live site:** https://keeganquigley.github.io/galactic-panic/
+**Live site:** https://galacticpanic.com
 
 ## Quick start
 
