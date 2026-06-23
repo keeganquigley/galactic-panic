@@ -14,9 +14,6 @@ npm run dev
 
 # generate release assets for a song
 ./scripts/generate-all.sh [song-slug]
-
-# prepare stems package for sending to a mix engineer
-./scripts/prepare-stems-package.sh [song-slug]
 ```
 
 ## Structure
@@ -28,7 +25,6 @@ content/songs/[slug]/         # one folder per song
   master-home.wav             # self-mixed master
   master-pro.wav              # professionally mixed master
   loop.mp4                    # source video for short-form content
-  stems/                      # exported stems for mix engineer
   output/                     # generated assets (Canvas, Shorts, etc.)
 
 scripts/                      # ffmpeg + bundling automation

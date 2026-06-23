@@ -4,19 +4,12 @@ content/songs/*/master-pro.wav
 content/songs/*/master-home.aif
 content/songs/*/master-pro.aif
 
-# Stems — also too large
-content/songs/*/stems/*.wav
-content/songs/*/stems/*.aif
-
 # Source video — usually large
 content/songs/*/loop.mp4
 content/songs/*/loop.mov
 
 # Generated output — regeneratable, no need to commit
 content/songs/*/output/
-
-# Stem packages — generated for delivery, no need to commit
-content/songs/*/*-stems-package.zip
 
 # Press photos — keep originals out of git, use compressed versions on site
 content/press/photos/originals/

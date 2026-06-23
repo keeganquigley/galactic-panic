@@ -16,7 +16,7 @@ This repo handles two things:
 - Each song lives in `content/songs/[slug]/`.
 - Required files per song: `metadata.json`, `cover.png` (3000x3000), at least one
   master file (`master-home.wav` or `master-pro.wav`).
-- Optional: `loop.mp4` (source video for short-form generation), `stems/` folder.
+- Optional: `loop.mp4` (source video for short-form generation).
 - Generated assets go in `content/songs/[slug]/output/` — not committed beyond a
   manifest.
 - Site is built with Eleventy (11ty), plain HTML/CSS/JS output. No SPA framework.

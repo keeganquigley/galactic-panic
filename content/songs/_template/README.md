@@ -14,7 +14,6 @@ Then drop in:
 - `loop.mp4` — source video for short-form generation. Vertical 9:16 ideal,
   but the scripts will crop/scale anything. Make it at least as long as your
   longest planned clip (~60s).
-- `stems/` — only when prepping for a pro mix. Drop exported stems here.
 
 Edit `metadata.json` with the real values for the song. The lyrics field uses
 `[m:ss]` timestamps, one line per line, e.g.:
