@@ -6,8 +6,17 @@
 
 const fs = require("fs");
 const path = require("path");
+const { EleventyHtmlBasePlugin } = require("@11ty/eleventy");
+
+// Served from a GitHub Pages project subpath (keeganquigley.github.io/galactic-panic/).
+// Override with PATH_PREFIX="/" when deploying to a root domain.
+const PATH_PREFIX = process.env.PATH_PREFIX || "/galactic-panic/";
 
 module.exports = function (eleventyConfig) {
+  // Rewrites root-absolute URLs in output HTML to include the pathPrefix,
+  // so /assets/... and /music/ resolve correctly under the project subpath.
+  eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
+
   // Static passthrough — copy assets folder as-is
   eleventyConfig.addPassthroughCopy({ "site/assets": "assets" });
 
@@ -84,6 +93,7 @@ module.exports = function (eleventyConfig) {
   });
 
   return {
+    pathPrefix: PATH_PREFIX,
     dir: {
       input: "site",
       output: "site/_site",
