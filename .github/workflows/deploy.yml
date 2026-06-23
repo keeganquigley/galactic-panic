@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Daily rebuild so date-based changes publish without a manual push:
+  # past shows lose their address/tickets, and scheduled track releases
+  # appear on their date. 09:00 UTC (~5am ET).
+  schedule:
+    - cron: "0 9 * * *"
 
 permissions:
   contents: read
