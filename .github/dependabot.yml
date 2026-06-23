@@ -1,0 +1,30 @@
+version: 2
+updates:
+  # Keep the GitHub Actions used in workflows up to date (e.g. checkout,
+  # setup-node, deploy-pages). Handles the action-version bumps for us.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "dependencies"
+
+  # Keep npm dependencies (Eleventy, etc.) up to date.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      npm-dependencies:
+        patterns:
+          - "*"
+    commit-message:
+      prefix: "deps"
+    labels:
+      - "dependencies"
