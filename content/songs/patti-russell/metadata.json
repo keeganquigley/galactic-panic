@@ -1,0 +1,22 @@
+{
+  "title": "Patti Russell",
+  "slug": "patti-russell",
+  "release_date_bandcamp": null,
+  "release_date_spotify": "2026-06-26",
+  "isrc": null,
+  "spotify_url": null,
+  "bandcamp_url": null,
+  "duration_seconds": 0,
+  "bpm": 0,
+  "key": "",
+  "lyrics": "",
+  "story": "",
+  "instruments_played": ["guitar", "bass", "drums", "vocals"],
+  "credits": {
+    "writing": "all members",
+    "performance": "Zack Bryant (bass, vocals), Keegan Quigley (drums, vocals), Jon Gamble (guitar)",
+    "mix_home": "",
+    "mix_pro": "Ryan Elvert",
+    "master": ""
+  }
+}

@@ -5,9 +5,9 @@ module.exports = {
   tagline: "",
   links: {
     bandcamp: "https://galacticpanic.bandcamp.com",
-    spotify: "",
+    spotify: "https://open.spotify.com/album/5DF7ORmP2GORSFIknd0taj",
     instagram: "https://instagram.com/galacticpanic",
     youtube: "",
-    email: "mailto:galacticpanic@example.com"
+    email: "mailto:galacticpanic26@gmail.com"
   }
 };
