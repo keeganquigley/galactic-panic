@@ -561,6 +561,91 @@ ul li {
   white-space: nowrap;
 }
 
+/* ---------- Shows ---------- */
+
+.shows-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+  max-width: none;
+}
+.show-row {
+  display: grid;
+  grid-template-columns: minmax(0, 240px) minmax(0, 1fr) auto;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1.25rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.show-row:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.show-date-day {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--plasma-cyan);
+}
+.show-name {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.show-city {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chrome-dim);
+}
+.show-details {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--chrome-dim);
+  margin-top: 0.4rem;
+}
+.show-tickets {
+  display: inline-block;
+  padding: 0.5rem 1.1rem;
+  border: 1px solid var(--ray-green);
+  background: transparent;
+  color: var(--ray-green);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+.show-tickets:hover {
+  background: var(--ray-green);
+  color: var(--void);
+  box-shadow: var(--glow-green);
+}
+.show-tickets-soon {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chrome-dim);
+  white-space: nowrap;
+}
+.shows-list-past {
+  opacity: 0.55;
+}
+.shows-list-past .show-name { color: var(--chrome-dim); }
+
+@media (max-width: 600px) {
+  .show-row {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+    padding: 1rem 0;
+  }
+  .show-action { margin-top: 0.4rem; }
+}
+
 /* ---------- Song detail ---------- */
 
 .song-detail {

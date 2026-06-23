@@ -81,6 +81,24 @@ module.exports = function (eleventyConfig) {
       });
   });
 
+  // Show filters — split a shows array into upcoming/past relative to the
+  // build date, sorted (upcoming ascending, past most-recent-first).
+  eleventyConfig.addFilter("upcomingShows", (shows) => {
+    const today = new Date().toISOString().slice(0, 10);
+    return (shows || [])
+      .filter((s) => s.date >= today)
+      .sort((a, b) => a.date.localeCompare(b.date));
+  });
+  eleventyConfig.addFilter("pastShows", (shows) => {
+    const today = new Date().toISOString().slice(0, 10);
+    return (shows || [])
+      .filter((s) => s.date < today)
+      .sort((a, b) => b.date.localeCompare(a.date))
+      // Strip ticket link + venue address once an event has passed, so the
+      // rendered page never carries that info for a past show.
+      .map(({ date, name, city }) => ({ date, name, city }));
+  });
+
   // Date filter — formats YYYY-MM-DD into a friendlier string
   eleventyConfig.addFilter("prettyDate", (dateStr) => {
     if (!dateStr) return "";
