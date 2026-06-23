@@ -1,0 +1,56 @@
+---
+layout: base.njk
+title: Shows
+permalink: /shows/
+---
+
+<h1>Shows</h1>
+<p class="eyebrow">Catch Galactic Panic live — Earth dates below</p>
+
+{% set upcoming = shows | upcomingShows %}
+{% set past = shows | pastShows %}
+
+{% if upcoming.length > 0 %}
+<ul class="shows-list">
+  {% for show in upcoming %}
+    <li class="show-row">
+      <div class="show-date">
+        <span class="show-date-day">{{ show.date | prettyDate }}</span>
+      </div>
+      <div class="show-info">
+        <div class="show-name">{{ show.name }}</div>
+        <div class="show-city">{{ show.city }}</div>
+        {% if show.details %}<div class="show-details">{{ show.details }}</div>{% endif %}
+      </div>
+      <div class="show-action">
+        {% if show.ticket_url %}
+          <a href="{{ show.ticket_url }}" class="show-tickets">Tickets</a>
+        {% else %}
+          <span class="show-tickets-soon">Tickets soon</span>
+        {% endif %}
+      </div>
+    </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="empty-state">
+  No shows on the calendar right now. Check back soon, Earthling.
+</div>
+{% endif %}
+
+{% if past.length > 0 %}
+<h2>Past transmissions</h2>
+<ul class="shows-list shows-list-past">
+  {% for show in past %}
+    <li class="show-row">
+      <div class="show-date">
+        <span class="show-date-day">{{ show.date | prettyDate }}</span>
+      </div>
+      <div class="show-info">
+        <div class="show-name">{{ show.name }}</div>
+        <div class="show-city">{{ show.city }}</div>
+      </div>
+    </li>
+  {% endfor %}
+</ul>
+{% endif %}
