@@ -93,7 +93,10 @@ module.exports = function (eleventyConfig) {
     const today = new Date().toISOString().slice(0, 10);
     return (shows || [])
       .filter((s) => s.date < today)
-      .sort((a, b) => b.date.localeCompare(a.date));
+      .sort((a, b) => b.date.localeCompare(a.date))
+      // Strip ticket link + venue address once an event has passed, so the
+      // rendered page never carries that info for a past show.
+      .map(({ date, name, city }) => ({ date, name, city }));
   });
 
   // Date filter — formats YYYY-MM-DD into a friendlier string
