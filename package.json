@@ -7,8 +7,7 @@
     "dev": "eleventy --serve",
     "build": "eleventy",
     "clean": "rm -rf site/_site",
-    "generate-all": "./scripts/generate-all.sh",
-    "prepare-stems": "./scripts/prepare-stems-package.sh"
+    "generate-all": "./scripts/generate-all.sh"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.0.0"
