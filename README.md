@@ -5,7 +5,7 @@ releases, plus the band website.
 
 **Live site:** https://galacticpanic.com
 
-**Traffic analytics:** https://galacticpanic.goatcounter.com (GoatCounter — privacy-friendly, no cookies)
+**Traffic analytics:** https://galacticpanic.goatcounter.com
 
 ## Quick start
 
