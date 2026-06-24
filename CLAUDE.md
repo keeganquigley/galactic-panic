@@ -51,6 +51,16 @@ This repo handles two things:
 }
 ```
 
+After editing any `metadata.json`, run `npm run validate` (script:
+`scripts/validate-metadata.js`). It checks every song against this schema —
+JSON parses, types are right, `slug` matches the folder, dates are `YYYY-MM-DD`,
+ISRCs are well-formed. CI runs the same check on every PR
+(`.github/workflows/validate.yml`) and before each deploy, because an invalid
+`metadata.json` makes the Eleventy build *silently skip* that song.
+
+The validator's logic is unit-tested with Node's built-in test runner (no deps):
+`npm test` (or `npm run test:coverage`), tests in `test/`. CI runs them too.
+
 ## Common tasks
 
 - **"Generate all assets for [slug]"** — Run scripts/generate-canvas.sh,
