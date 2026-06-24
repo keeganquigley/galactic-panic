@@ -1,0 +1,23 @@
+name: Validate metadata
+
+# PR gate: rejects any change that would leave a song's metadata.json invalid.
+# A broken file (e.g. an unquoted ISRC) parses as invalid JSON and the Eleventy
+# build silently *skips* that song — this check fails the PR instead so the
+# problem is caught before merge.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - run: node scripts/validate-metadata.js
+      - run: node --test
