@@ -16,6 +16,8 @@ This repo handles two things:
 - Each song lives in `content/songs/[slug]/`.
 - Required files per song: `metadata.json`, `cover.png` (3000x3000), at least one
   master file (`master-home.wav` or `master-pro.wav`).
+- Lyrics live in `lyrics.txt` (one line per line, each prefixed with a `[m:ss]`
+  timestamp for lyric-video sync), not in `metadata.json`.
 - Optional: `loop.mp4` (source video for short-form generation).
 - Generated assets go in `content/songs/[slug]/output/` — not committed beyond a
   manifest.
@@ -37,7 +39,6 @@ This repo handles two things:
   "duration_seconds": 0,
   "bpm": 0,
   "key": "string (e.g. 'E minor')",
-  "lyrics": "string with [mm:ss] timestamps for lyric video generation",
   "story": "string — the behind-the-song blurb, used on song page and press materials",
   "instruments_played": ["guitar", "bass", "drums", "vocals", "..."],
   "credits": {
@@ -54,7 +55,7 @@ This repo handles two things:
 
 - **"Generate all assets for [slug]"** — Run scripts/generate-canvas.sh,
   scripts/generate-shorts.sh, scripts/generate-visualizer.sh for that slug.
-  Generate a lyric video from metadata.json. Write a `manifest.json` in the
+  Generate a lyric video from `lyrics.txt`. Write a `manifest.json` in the
   output folder listing every file with dimensions and duration.
 - **"Add a new song page to the site for [slug]"** — Create
   `site/songs/[slug].md` from the template, ensure metadata.json is in the
