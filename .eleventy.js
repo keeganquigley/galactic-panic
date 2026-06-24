@@ -7,6 +7,7 @@
 const fs = require("fs");
 const path = require("path");
 const { EleventyHtmlBasePlugin } = require("@11ty/eleventy");
+const Image = require("@11ty/eleventy-img");
 
 // Served from the root custom domain (galacticpanic.com), so no path prefix.
 // Override with PATH_PREFIX="/galactic-panic/" to serve from the GitHub Pages
@@ -17,6 +18,53 @@ module.exports = function (eleventyConfig) {
   // Rewrites root-absolute URLs in output HTML to include the pathPrefix,
   // so /assets/... and /music/ resolve correctly under the project subpath.
   eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
+
+  // Responsive image shortcode. Generates resized AVIF/WebP/JPEG variants
+  // with a srcset so browsers download an appropriately sized file instead
+  // of the full 3000x3000 master. Output goes to /assets/img/ (hashed names,
+  // cached across builds).
+  //
+  //   {% image src, alt, sizes, className, loading %}
+  //
+  // - src:       filesystem path to the source image (e.g. song.cover_src)
+  // - alt:       alt text ("" is allowed for decorative images)
+  // - sizes:     CSS "sizes" attribute (default "100vw")
+  // - className: class applied to the <img> (optional)
+  // - loading:   "lazy" (default) or "eager" for above-the-fold/LCP images
+  async function imageShortcode(
+    src,
+    alt = "",
+    sizes = "100vw",
+    className = "",
+    loading = "lazy"
+  ) {
+    const metadata = await Image(src, {
+      widths: [300, 600, 900, 1200, 1800],
+      formats: ["avif", "webp", "jpeg"],
+      outputDir: "./site/_site/assets/img/",
+      urlPath: "/assets/img/",
+    });
+    const attrs = {
+      alt,
+      sizes,
+      loading,
+      decoding: "async",
+    };
+    if (className) attrs.class = className;
+    // Hint the priority: eager (LCP/above-the-fold) images compete for early
+    // bandwidth, lazy ones defer.
+    attrs.fetchpriority = loading === "eager" ? "high" : "low";
+    return Image.generateHTML(metadata, attrs);
+  }
+  eleventyConfig.addAsyncShortcode("image", imageShortcode);
+
+  // Absolute-URL filter — turns a root-relative path (/foo) into a full
+  // https://galacticpanic.com/foo URL for canonical + social meta tags.
+  eleventyConfig.addFilter("absoluteUrl", (urlPath) => {
+    if (!urlPath) return "";
+    if (/^https?:\/\//.test(urlPath)) return urlPath;
+    return `https://galacticpanic.com${urlPath.startsWith("/") ? "" : "/"}${urlPath}`;
+  });
 
   // Static passthrough — copy assets folder as-is
   eleventyConfig.addPassthroughCopy({ "site/assets": "assets" });
@@ -70,6 +118,11 @@ module.exports = function (eleventyConfig) {
             ...meta,
             lyrics,
             cover_url: hasCover ? `/assets/covers/${d.name}.png` : null,
+            // Filesystem path to the master cover, for the {% image %}
+            // shortcode to generate responsive variants from.
+            cover_src: hasCover
+              ? path.join(songsDir, d.name, "cover.png")
+              : null,
             first_release_date: dates[0] || null,
             latest_release_date: dates[dates.length - 1] || null,
             has_pro_version: !!meta.release_date_spotify,

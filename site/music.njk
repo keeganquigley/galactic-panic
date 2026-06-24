@@ -14,7 +14,7 @@ permalink: /music/
   {% for song in songs %}
     <a href="/songs/{{ song.slug }}/" class="song-card">
       <div class="song-card-art">
-        {% if song.cover_url %}<img src="{{ song.cover_url }}" alt="">{% endif %}
+        {% if song.cover_src %}{% image song.cover_src, "", "(max-width: 600px) 45vw, 300px" %}{% endif %}
       </div>
       <div class="song-card-body">
         <div class="song-card-title">{{ song.title }}</div>
