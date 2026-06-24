@@ -1,14 +1,17 @@
 #!/usr/bin/env node
 //
-// Generate a lyric video from timestamped lyrics in metadata.json.
+// Generate a lyric video from timestamped lyrics in lyrics.txt.
 // Produces an ffmpeg drawtext filter chain with each lyric line displayed
 // at its timestamp, fading in/out smoothly.
 //
 // Usage:
 //   node scripts/generate-lyric-video.js <song-slug>
 //
-// Lyrics format in metadata.json:
-//   "lyrics": "[0:00] First line\n[0:04] Second line\n[0:09] Third line\n..."
+// Lyrics format — content/songs/<slug>/lyrics.txt, one line per line:
+//   [0:00] First line
+//   [0:04] Second line
+//   [0:09] Third line
+// Lines without a [m:ss] timestamp are ignored (treat as section markers).
 
 const fs = require("fs");
 const path = require("path");
@@ -22,6 +25,7 @@ if (!slug) {
 
 const songDir = path.join("content", "songs", slug);
 const metaPath = path.join(songDir, "metadata.json");
+const lyricsPath = path.join(songDir, "lyrics.txt");
 const coverPath = path.join(songDir, "cover.png");
 const outDir = path.join(songDir, "output");
 const outPath = path.join(outDir, "lyric-video.mp4");
@@ -43,14 +47,20 @@ if (!fs.existsSync(audioPath)) {
   process.exit(1);
 }
 
-if (!meta.lyrics || meta.lyrics.trim().length === 0) {
-  console.error("Error: metadata.json has no lyrics field");
+if (!fs.existsSync(lyricsPath)) {
+  console.error(`Error: ${lyricsPath} not found`);
+  process.exit(1);
+}
+
+const lyrics = fs.readFileSync(lyricsPath, "utf8");
+if (!lyrics || lyrics.trim().length === 0) {
+  console.error(`Error: ${lyricsPath} is empty`);
   process.exit(1);
 }
 
 // Parse lyrics: each line should start with [m:ss] or [mm:ss]
 // Lines without timestamps are skipped (treat them as section markers)
-const lines = meta.lyrics
+const lines = lyrics
   .split("\n")
   .map((l) => l.trim())
   .filter(Boolean)

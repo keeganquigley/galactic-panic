@@ -62,8 +62,13 @@ module.exports = function (eleventyConfig) {
           const hasCover = fs.existsSync(
             path.join(songsDir, d.name, "cover.png")
           );
+          const lyricsPath = path.join(songsDir, d.name, "lyrics.txt");
+          const lyrics = fs.existsSync(lyricsPath)
+            ? fs.readFileSync(lyricsPath, "utf8")
+            : "";
           return {
             ...meta,
+            lyrics,
             cover_url: hasCover ? `/assets/covers/${d.name}.png` : null,
             first_release_date: dates[0] || null,
             latest_release_date: dates[dates.length - 1] || null,

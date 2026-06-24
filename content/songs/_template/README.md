@@ -15,8 +15,10 @@ Then drop in:
   but the scripts will crop/scale anything. Make it at least as long as your
   longest planned clip (~60s).
 
-Edit `metadata.json` with the real values for the song. The lyrics field uses
-`[m:ss]` timestamps, one line per line, e.g.:
+Edit `metadata.json` with the real values for the song.
+
+Put lyrics in `lyrics.txt` (one line per line), each prefixed with a `[m:ss]`
+timestamp for lyric-video sync, e.g.:
 
 ```
 [0:00] When the lights go down
