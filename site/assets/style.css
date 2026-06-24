@@ -185,6 +185,25 @@ a:hover {
   transform: scaleX(1);
 }
 
+/* Mobile: stack the brand over the nav, center the tabs, and let them
+   wrap with tighter spacing so all six fit (no cut-off "Press"). */
+@media (max-width: 600px) {
+  .header-inner {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    gap: 0.75rem;
+    padding: 0 1rem;
+  }
+  .site-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+  }
+}
+
 /* ---------- Main ---------- */
 
 main {
