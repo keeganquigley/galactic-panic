@@ -17,7 +17,9 @@ This repo handles two things:
 - Required files per song: `metadata.json`, `cover.png` (3000x3000), at least one
   master file (`master-home.wav` or `master-pro.wav`).
 - Lyrics live in `lyrics.txt` (one line per line, each prefixed with a `[m:ss]`
-  timestamp for lyric-video sync), not in `metadata.json`.
+  timestamp for lyric-video sync), not in `metadata.json`. The site renders
+  `lyrics.txt` verbatim in a "Lyrics" section on the song page when non-empty,
+  so it doubles as the on-site lyric source.
 - Optional: `loop.mp4` (source video for short-form generation).
 - Generated assets go in `content/songs/[slug]/output/` — not committed beyond a
   manifest.
@@ -71,7 +73,9 @@ is defined in exactly one place rather than restated in the build.
 - **"Generate all assets for [slug]"** — Run scripts/generate-canvas.sh,
   scripts/generate-shorts.sh, scripts/generate-visualizer.sh for that slug.
   Generate a lyric video from `lyrics.txt`. Write a `manifest.json` in the
-  output folder listing every file with dimensions and duration.
+  output folder listing every file with dimensions and duration. The lyric
+  video picks a font per-platform (macOS/Linux); override with the `FONT_PATH`
+  env var to use a specific font file.
 - **"Add a new song page to the site for [slug]"** — Create
   `site/songs/[slug].md` from the template, ensure metadata.json is in the
   data pipeline. Eleventy will pick it up automatically.

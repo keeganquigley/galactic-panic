@@ -747,6 +747,27 @@ ul li {
 }
 .song-credits dd::after { content: ""; display: block; }
 
+.song-lyrics {
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--ray-green-dim);
+}
+.song-lyrics h2 {
+  font-family: var(--font-display);
+  color: var(--ray-green);
+  text-shadow: var(--glow-green);
+  letter-spacing: 0.04em;
+}
+.lyrics-body {
+  /* Lyrics are uploaded as plain text; preserve their line breaks while
+     collapsing incidental runs of whitespace. */
+  white-space: pre-line;
+  max-width: var(--measure);
+  margin-top: 1.25rem;
+  color: var(--chrome);
+  line-height: 1.7;
+}
+
 @media (max-width: 720px) {
   .song-detail { grid-template-columns: 1fr; gap: 2rem; }
 }

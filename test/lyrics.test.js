@@ -12,6 +12,7 @@ const {
   parseLyrics,
   buildEvents,
   escapeForDrawtext,
+  defaultFont,
 } = require("../lib/lyrics.js");
 
 test("parseLyrics reads [m:ss] lines into { time, text } in order", () => {
@@ -93,4 +94,16 @@ test("escapeForDrawtext coerces nullish to empty string", () => {
 
 test("FADE is the expected constant", () => {
   assert.equal(FADE, 0.4);
+});
+
+test("defaultFont returns a per-platform font path", () => {
+  assert.equal(defaultFont("darwin"), "/System/Library/Fonts/Helvetica.ttc");
+  assert.equal(
+    defaultFont("linux"),
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+  );
+});
+
+test("defaultFont falls back to the macOS font for unknown platforms", () => {
+  assert.equal(defaultFont("win32"), "/System/Library/Fonts/Helvetica.ttc");
 });
