@@ -109,7 +109,15 @@ const musicAlbumLd = (songs) => {
   if (dates.length) ld.datePublished = dates[0];
   const withCover = list.find((s) => s.cover_url);
   if (withCover) ld.image = toAbsolute(withCover.cover_url);
-  ld.track = list.map((s, i) => {
+  // Order tracks by release date ascending so position reflects the EP's
+  // track listing, not the collection's newest-first display sort. Tracks
+  // without a release date sort last, preserving their relative order.
+  const ordered = [...list].sort((a, b) =>
+    (a.first_release_date || "9999-99-99").localeCompare(
+      b.first_release_date || "9999-99-99"
+    )
+  );
+  ld.track = ordered.map((s, i) => {
     const t = {
       "@type": "MusicRecording",
       position: i + 1,
