@@ -8,6 +8,123 @@ const fs = require("fs");
 const path = require("path");
 const { EleventyHtmlBasePlugin } = require("@11ty/eleventy");
 const Image = require("@11ty/eleventy-img");
+const artist = require("./site/_data/artist.js");
+
+// Canonical origin for absolute URLs in <link rel=canonical>, social meta,
+// and JSON-LD structured data.
+const SITE_URL = "https://galacticpanic.com";
+
+// Turn a root-relative path (/foo) into a full https://galacticpanic.com/foo
+// URL. Pass-through for values that are already absolute.
+const toAbsolute = (urlPath) => {
+  if (!urlPath) return "";
+  if (/^https?:\/\//.test(urlPath)) return urlPath;
+  return `${SITE_URL}${urlPath.startsWith("/") ? "" : "/"}${urlPath}`;
+};
+
+// Seconds -> ISO 8601 duration (e.g. 245 -> "PT4M5S"), the format schema.org
+// expects for MusicRecording.duration. Returns null for missing/zero values
+// (duration_seconds is often 0 until a master is measured).
+const isoDuration = (seconds) => {
+  const s = Number(seconds) || 0;
+  if (s <= 0) return null;
+  return `PT${Math.floor(s / 60)}M${s % 60}S`;
+};
+
+// The performing artist, as a schema.org MusicGroup. sameAs links the entity
+// to its profiles on streaming/social platforms (skipping the mailto: link).
+const musicGroup = () => {
+  const sameAs = Object.values(artist.links || {}).filter(
+    (u) => u && !u.startsWith("mailto:")
+  );
+  return {
+    "@type": "MusicGroup",
+    name: artist.name,
+    url: SITE_URL,
+    ...(sameAs.length ? { sameAs } : {}),
+  };
+};
+
+// JSON-encode structured data for safe embedding inside a <script> tag.
+// Escaping "<" prevents a "</script>" sequence in any field from breaking out.
+const jsonLd = (obj) => JSON.stringify(obj).replace(/</g, "\\u003c");
+
+// schema.org/MusicRecording for a single song, derived entirely from the
+// song's metadata.json (this never mutates that source of truth).
+const musicRecordingLd = (song) => {
+  const ld = {
+    "@context": "https://schema.org",
+    "@type": "MusicRecording",
+    name: song.title,
+    url: toAbsolute(`/songs/${song.slug}/`),
+    byArtist: musicGroup(),
+    inAlbum: {
+      "@type": "MusicAlbum",
+      name: artist.name,
+      albumReleaseType: "https://schema.org/EPRelease",
+      byArtist: { "@type": "MusicGroup", name: artist.name, url: SITE_URL },
+    },
+  };
+  if (song.cover_url) ld.image = toAbsolute(song.cover_url);
+  if (song.story) ld.description = song.story;
+  const date = song.latest_release_date || song.first_release_date;
+  if (date) ld.datePublished = date;
+  if (song.isrc) ld.isrcCode = song.isrc;
+  const dur = isoDuration(song.duration_seconds);
+  if (dur) ld.duration = dur;
+  const sameAs = [song.spotify_url, song.bandcamp_url].filter(Boolean);
+  if (sameAs.length) ld.sameAs = sameAs;
+  if (song.credits && song.credits.writing) {
+    const composer = song.credits.writing
+      .split(",")
+      .map((n) => n.trim())
+      .filter(Boolean)
+      .map((name) => ({ "@type": "Person", name }));
+    ld.recordingOf = {
+      "@type": "MusicComposition",
+      name: song.title,
+      ...(composer.length ? { composer } : {}),
+    };
+  }
+  return jsonLd(ld);
+};
+
+// schema.org/MusicAlbum for the self-titled EP, built from the released-songs
+// collection. numTracks/track reflect what is currently live, so the markup
+// stays in step with the weekly rollout rather than advertising unreleased
+// tracks.
+const musicAlbumLd = (songs) => {
+  const list = (songs || []).filter(Boolean);
+  const ld = {
+    "@context": "https://schema.org",
+    "@type": "MusicAlbum",
+    name: artist.name,
+    url: toAbsolute("/music/"),
+    albumReleaseType: "https://schema.org/EPRelease",
+    albumProductionType: "https://schema.org/StudioAlbum",
+    byArtist: musicGroup(),
+    numTracks: list.length,
+  };
+  const dates = list.map((s) => s.first_release_date).filter(Boolean).sort();
+  if (dates.length) ld.datePublished = dates[0];
+  const withCover = list.find((s) => s.cover_url);
+  if (withCover) ld.image = toAbsolute(withCover.cover_url);
+  ld.track = list.map((s, i) => {
+    const t = {
+      "@type": "MusicRecording",
+      position: i + 1,
+      name: s.title,
+      url: toAbsolute(`/songs/${s.slug}/`),
+    };
+    if (s.isrc) t.isrcCode = s.isrc;
+    const dur = isoDuration(s.duration_seconds);
+    if (dur) t.duration = dur;
+    const d = s.latest_release_date || s.first_release_date;
+    if (d) t.datePublished = d;
+    return t;
+  });
+  return jsonLd(ld);
+};
 
 // Served from the root custom domain (galacticpanic.com), so no path prefix.
 // Override with PATH_PREFIX="/galactic-panic/" to serve from the GitHub Pages
@@ -60,11 +177,13 @@ module.exports = function (eleventyConfig) {
 
   // Absolute-URL filter — turns a root-relative path (/foo) into a full
   // https://galacticpanic.com/foo URL for canonical + social meta tags.
-  eleventyConfig.addFilter("absoluteUrl", (urlPath) => {
-    if (!urlPath) return "";
-    if (/^https?:\/\//.test(urlPath)) return urlPath;
-    return `https://galacticpanic.com${urlPath.startsWith("/") ? "" : "/"}${urlPath}`;
-  });
+  eleventyConfig.addFilter("absoluteUrl", toAbsolute);
+
+  // JSON-LD structured data filters. Emit schema.org markup derived from
+  // metadata.json so search engines can read the catalog (SEO). See the
+  // helpers near the top of this file.
+  eleventyConfig.addFilter("musicRecordingLd", musicRecordingLd);
+  eleventyConfig.addFilter("musicAlbumLd", musicAlbumLd);
 
   // Static passthrough — copy assets folder as-is
   eleventyConfig.addPassthroughCopy({ "site/assets": "assets" });

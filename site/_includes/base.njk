@@ -24,6 +24,15 @@
   <meta name="twitter:description" content="{{ metaDesc }}">
   <meta name="twitter:image" content="{{ socialImageUrl }}">
 
+  {# JSON-LD structured data for SEO. Song pages describe a MusicRecording;
+     the music page describes the EP as a MusicAlbum. Both are derived from
+     metadata.json via filters in .eleventy.js. #}
+  {% if song %}
+  <script type="application/ld+json">{{ song | musicRecordingLd | safe }}</script>
+  {% elif albumJsonLd %}
+  <script type="application/ld+json">{{ collections.songs | musicAlbumLd | safe }}</script>
+  {% endif %}
+
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
