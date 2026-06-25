@@ -1,8 +1,6 @@
-# Audio masters — too large for git, keep on local filesystem
+# Audio masters (WAV) — too large for git, keep on local filesystem
 content/songs/*/master-home.wav
 content/songs/*/master-pro.wav
-content/songs/*/master-home.aif
-content/songs/*/master-pro.aif
 
 # Source video — usually large
 content/songs/*/loop.mp4

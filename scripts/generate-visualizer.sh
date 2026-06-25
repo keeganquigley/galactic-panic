@@ -11,6 +11,8 @@
 
 set -euo pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
+
 SLUG="${1:?Usage: generate-visualizer.sh <song-slug>}"
 
 SONG_DIR="content/songs/${SLUG}"
@@ -18,15 +20,8 @@ COVER="${SONG_DIR}/cover.png"
 OUT_DIR="${SONG_DIR}/output"
 OUT="${OUT_DIR}/visualizer.mp4"
 
-# Prefer pro master if available
-if [[ -f "${SONG_DIR}/master-pro.wav" ]]; then
-  AUDIO="${SONG_DIR}/master-pro.wav"
-elif [[ -f "${SONG_DIR}/master-home.wav" ]]; then
-  AUDIO="${SONG_DIR}/master-home.wav"
-else
-  echo "Error: no master file found in ${SONG_DIR}" >&2
-  exit 1
-fi
+# Prefer pro master if available, fall back to home master (exits if neither)
+AUDIO="$(resolve_master "$SONG_DIR")"
 
 if [[ ! -f "$COVER" ]]; then
   echo "Error: ${COVER} not found" >&2
