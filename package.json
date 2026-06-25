@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "Website and content asset generation for Galactic Panic",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "eleventy --serve",
     "build": "eleventy",

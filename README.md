@@ -24,7 +24,8 @@ npm run dev
 
 ```
 content/songs/[slug]/         # one folder per song
-  metadata.json               # song info, lyrics, credits
+  metadata.json               # song info, credits
+  lyrics.txt                  # timestamped lyrics ([m:ss] per line)
   cover.png                   # 3000x3000 cover art
   master-home.wav             # self-mixed master
   master-pro.wav              # professionally mixed master
