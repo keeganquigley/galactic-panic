@@ -17,8 +17,8 @@ description: ""
 {% if latest %}
 <section class="latest-release">
   <div class="latest-release-art">
-    {% if latest.cover_url %}
-      <img src="{{ latest.cover_url }}" alt="{{ latest.title }} cover">
+    {% if latest.cover_src %}
+      {% image latest.cover_src, latest.title + " cover", "(max-width: 700px) 100vw, 480px", "", "eager" %}
     {% else %}
       <div class="latest-release-art-placeholder">{{ latest.title }}</div>
     {% endif %}
@@ -49,7 +49,7 @@ description: ""
     {% for song in songs.slice(1, 7) %}
       <a href="/songs/{{ song.slug }}/" class="song-card">
         <div class="song-card-art">
-          {% if song.cover_url %}<img src="{{ song.cover_url }}" alt="">{% endif %}
+          {% if song.cover_src %}{% image song.cover_src, "", "(max-width: 600px) 45vw, 300px" %}{% endif %}
         </div>
         <div class="song-card-body">
           <div class="song-card-title">{{ song.title }}</div>

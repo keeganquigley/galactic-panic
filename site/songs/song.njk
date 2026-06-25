@@ -8,12 +8,14 @@ permalink: "/songs/{{ song.slug }}/"
 eleventyComputed:
   title: "{{ song.title }}"
   description: "{% if song.story %}{{ song.story }}{% else %}{{ artist.tagline }}{% endif %}"
+  socialImage: "{{ song.cover_url }}"
+  ogType: "music.song"
 ---
 
 <article class="song-detail">
   <div class="song-detail-art">
-    {% if song.cover_url %}
-      <img src="{{ song.cover_url }}" alt="{{ song.title }} cover">
+    {% if song.cover_src %}
+      {% image song.cover_src, song.title + " cover", "(max-width: 700px) 100vw, 520px", "", "eager" %}
     {% endif %}
   </div>
   <div>
