@@ -23,6 +23,7 @@ const {
   parseLyrics,
   buildEvents,
   escapeForDrawtext,
+  defaultFont,
 } = require("../lib/lyrics.js");
 
 const slug = process.argv[2];
@@ -78,6 +79,15 @@ if (lines.length === 0) {
 // shows until the song's duration (falling back to last line + 5s).
 const events = buildEvents(lines, meta.duration_seconds);
 
+// Resolve the drawtext font: FONT_PATH wins, else a per-platform default.
+// Fail early with a clear message rather than letting ffmpeg error cryptically.
+const fontPath = process.env.FONT_PATH || defaultFont(process.platform);
+if (!fs.existsSync(fontPath)) {
+  console.error(`Error: font not found at ${fontPath}`);
+  console.error("Set FONT_PATH=/path/to/font.ttf to point at a font you have.");
+  process.exit(1);
+}
+
 // Build the drawtext filter chain. Each line gets its own drawtext with
 // alpha-fade controlled by enable/between() and st/et fade.
 const drawtextFilters = events
@@ -86,7 +96,7 @@ const drawtextFilters = events
     const fadeIn = `if(lt(t,${e.start + FADE}), (t-${e.start})/${FADE}, 1)`;
     const fadeOut = `if(gt(t,${e.end - FADE}), (${e.end}-t)/${FADE}, 1)`;
     return [
-      `drawtext=fontfile=/System/Library/Fonts/Helvetica.ttc`,
+      `drawtext=fontfile=${fontPath}`,
       `text='${safeText}'`,
       `fontsize=64`,
       `fontcolor=white`,
@@ -130,7 +140,6 @@ try {
   console.log(`\n✓ Lyric video generated: ${outPath}`);
 } catch (err) {
   console.error("ffmpeg failed.");
-  console.error("Note: this script uses Helvetica from macOS system fonts.");
-  console.error("On Linux, change the fontfile path in the script.");
+  console.error(`Note: using font ${fontPath} (override with FONT_PATH).`);
   process.exit(1);
 }

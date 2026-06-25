@@ -62,4 +62,11 @@ eleventyComputed:
   </div>
 </article>
 
+{% if song.lyrics | trim %}
+  <section class="song-lyrics">
+    <h2>Lyrics</h2>
+    <div class="lyrics-body">{{ song.lyrics }}</div>
+  </section>
+{% endif %}
+
 <p style="margin-top: 3rem;"><a href="/music/">← All music</a></p>
