@@ -9,6 +9,11 @@ const path = require("path");
 const { EleventyHtmlBasePlugin } = require("@11ty/eleventy");
 const Image = require("@11ty/eleventy-img");
 const artist = require("./site/_data/artist.js");
+// Reuse the validator's directory lister so "which folders are songs" (skip
+// non-dirs and _-prefixed templates) is defined in exactly one place. The
+// validator is the schema's source of truth; importing it can't double-run
+// the CLI (that's guarded by require.main === module).
+const { listSongDirs } = require("./scripts/validate-metadata.js");
 
 // Canonical origin for absolute URLs in <link rel=canonical>, social meta,
 // and JSON-LD structured data.
@@ -204,12 +209,11 @@ module.exports = function (eleventyConfig) {
 
   // Copy each song's cover.png into the build at /assets/covers/[slug].png
   if (fs.existsSync(songsDir)) {
-    for (const d of fs.readdirSync(songsDir, { withFileTypes: true })) {
-      if (!d.isDirectory() || d.name.startsWith("_")) continue;
-      const coverPath = path.join(songsDir, d.name, "cover.png");
+    for (const name of listSongDirs(songsDir)) {
+      const coverPath = path.join(songsDir, name, "cover.png");
       if (fs.existsSync(coverPath)) {
         eleventyConfig.addPassthroughCopy({
-          [`content/songs/${d.name}/cover.png`]: `assets/covers/${d.name}.png`,
+          [`content/songs/${name}/cover.png`]: `assets/covers/${name}.png`,
         });
       }
     }
@@ -223,11 +227,9 @@ module.exports = function (eleventyConfig) {
     // hasn't arrived yet, so the weekly rollout stays under wraps.
     const today = new Date().toISOString().slice(0, 10);
 
-    return fs
-      .readdirSync(songsDir, { withFileTypes: true })
-      .filter((d) => d.isDirectory() && !d.name.startsWith("_"))
-      .map((d) => {
-        const metaPath = path.join(songsDir, d.name, "metadata.json");
+    return listSongDirs(songsDir)
+      .map((name) => {
+        const metaPath = path.join(songsDir, name, "metadata.json");
         if (!fs.existsSync(metaPath)) return null;
         try {
           const meta = JSON.parse(fs.readFileSync(metaPath, "utf8"));
@@ -235,20 +237,20 @@ module.exports = function (eleventyConfig) {
             .filter(Boolean)
             .sort();
           const hasCover = fs.existsSync(
-            path.join(songsDir, d.name, "cover.png")
+            path.join(songsDir, name, "cover.png")
           );
-          const lyricsPath = path.join(songsDir, d.name, "lyrics.txt");
+          const lyricsPath = path.join(songsDir, name, "lyrics.txt");
           const lyrics = fs.existsSync(lyricsPath)
             ? fs.readFileSync(lyricsPath, "utf8")
             : "";
           return {
             ...meta,
             lyrics,
-            cover_url: hasCover ? `/assets/covers/${d.name}.png` : null,
+            cover_url: hasCover ? `/assets/covers/${name}.png` : null,
             // Filesystem path to the master cover, for the {% image %}
             // shortcode to generate responsive variants from.
             cover_src: hasCover
-              ? path.join(songsDir, d.name, "cover.png")
+              ? path.join(songsDir, name, "cover.png")
               : null,
             first_release_date: dates[0] || null,
             latest_release_date: dates[dates.length - 1] || null,
@@ -256,7 +258,7 @@ module.exports = function (eleventyConfig) {
             has_home_version: !!meta.release_date_bandcamp,
           };
         } catch (e) {
-          console.warn(`Skipping ${d.name}: invalid metadata.json (${e.message})`);
+          console.warn(`Skipping ${name}: invalid metadata.json (${e.message})`);
           return null;
         }
       })

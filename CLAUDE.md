@@ -61,6 +61,11 @@ ISRCs are well-formed. CI runs the same check on every PR
 The validator's logic is unit-tested with Node's built-in test runner (no deps):
 `npm test` (or `npm run test:coverage`), tests in `test/`. CI runs them too.
 
+`scripts/validate-metadata.js` is the single source of truth for the schema —
+it exports its helpers, and `.eleventy.js` imports `listSongDirs` from it so the
+"which folders count as songs" rule (skip non-dirs and `_`-prefixed templates)
+is defined in exactly one place rather than restated in the build.
+
 ## Common tasks
 
 - **"Generate all assets for [slug]"** — Run scripts/generate-canvas.sh,

@@ -13,6 +13,8 @@
 
 set -euo pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
+
 SLUG="${1:?Usage: generate-shorts.sh <song-slug> [chorus-start]}"
 CHORUS_START="${2:-60}"
 
@@ -20,15 +22,8 @@ SONG_DIR="content/songs/${SLUG}"
 VIDEO_SOURCE="${SONG_DIR}/loop.mp4"
 OUT_DIR="${SONG_DIR}/output/shorts"
 
-# Prefer pro master if available, fall back to home master
-if [[ -f "${SONG_DIR}/master-pro.wav" ]]; then
-  AUDIO_SOURCE="${SONG_DIR}/master-pro.wav"
-elif [[ -f "${SONG_DIR}/master-home.wav" ]]; then
-  AUDIO_SOURCE="${SONG_DIR}/master-home.wav"
-else
-  echo "Error: no master file found in ${SONG_DIR}" >&2
-  exit 1
-fi
+# Prefer pro master if available, fall back to home master (exits if neither)
+AUDIO_SOURCE="$(resolve_master "$SONG_DIR")"
 
 if [[ ! -f "$VIDEO_SOURCE" ]]; then
   echo "Error: ${VIDEO_SOURCE} not found" >&2
@@ -41,7 +36,7 @@ mkdir -p "$OUT_DIR"
 echo "→ Generating hook-30s.mp4"
 ffmpeg -y -stream_loop -1 -i "$VIDEO_SOURCE" -i "$AUDIO_SOURCE" \
   -t 30 \
-  -vf "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920" \
+  -vf "$(fill_crop 1080 1920)" \
   -map 0:v -map 1:a \
   -c:v libx264 -pix_fmt yuv420p -preset medium -crf 20 \
   -c:a aac -b:a 192k \
@@ -52,7 +47,7 @@ ffmpeg -y -stream_loop -1 -i "$VIDEO_SOURCE" -i "$AUDIO_SOURCE" \
 echo "→ Generating chorus-25s.mp4 (starting at ${CHORUS_START}s)"
 ffmpeg -y -stream_loop -1 -i "$VIDEO_SOURCE" -ss "$CHORUS_START" -i "$AUDIO_SOURCE" \
   -t 25 \
-  -vf "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920" \
+  -vf "$(fill_crop 1080 1920)" \
   -map 0:v -map 1:a \
   -c:v libx264 -pix_fmt yuv420p -preset medium -crf 20 \
   -c:a aac -b:a 192k \
@@ -63,7 +58,7 @@ ffmpeg -y -stream_loop -1 -i "$VIDEO_SOURCE" -ss "$CHORUS_START" -i "$AUDIO_SOUR
 echo "→ Generating square-60s.mp4"
 ffmpeg -y -stream_loop -1 -i "$VIDEO_SOURCE" -i "$AUDIO_SOURCE" \
   -t 60 \
-  -vf "scale=1080:1080:force_original_aspect_ratio=increase,crop=1080:1080" \
+  -vf "$(fill_crop 1080 1080)" \
   -map 0:v -map 1:a \
   -c:v libx264 -pix_fmt yuv420p -preset medium -crf 20 \
   -c:a aac -b:a 192k \

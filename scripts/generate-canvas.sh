@@ -10,6 +10,8 @@
 
 set -euo pipefail
 
+source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
+
 SLUG="${1:?Usage: generate-canvas.sh <song-slug> [duration]}"
 DURATION="${2:-7}"
 
@@ -27,7 +29,7 @@ mkdir -p "$OUT_DIR"
 
 ffmpeg -y -i "$SOURCE" \
   -t "$DURATION" \
-  -vf "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920" \
+  -vf "$(fill_crop 1080 1920)" \
   -an \
   -c:v libx264 -pix_fmt yuv420p -preset slow -crf 20 \
   -movflags +faststart \
