@@ -37,11 +37,11 @@ echo ""
 echo ""
 
 # Lyric video is optional — only run if lyrics are present
-if node -e "process.exit(require('./${SONG_DIR}/metadata.json').lyrics ? 0 : 1)" 2>/dev/null; then
+if [[ -s "${SONG_DIR}/lyrics.txt" ]]; then
   node "$SCRIPT_DIR/generate-lyric-video.js" "$SLUG"
   echo ""
 else
-  echo "→ Skipping lyric video (no lyrics in metadata.json)"
+  echo "→ Skipping lyric video (no lyrics.txt in ${SONG_DIR})"
   echo ""
 fi
 
