@@ -16,6 +16,14 @@
 const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
+// Pure parsing/escaping helpers live in lib/ so they can be unit-tested
+// without invoking ffmpeg. See test/lyrics.test.js.
+const {
+  FADE,
+  parseLyrics,
+  buildEvents,
+  escapeForDrawtext,
+} = require("../lib/lyrics.js");
 
 const slug = process.argv[2];
 if (!slug) {
@@ -58,49 +66,17 @@ if (!lyrics || lyrics.trim().length === 0) {
   process.exit(1);
 }
 
-// Parse lyrics: each line should start with [m:ss] or [mm:ss]
-// Lines without timestamps are skipped (treat them as section markers)
-const lines = lyrics
-  .split("\n")
-  .map((l) => l.trim())
-  .filter(Boolean)
-  .map((line) => {
-    const match = line.match(/^\[(\d+):(\d{2})\]\s*(.+)$/);
-    if (!match) return null;
-    const minutes = parseInt(match[1], 10);
-    const seconds = parseInt(match[2], 10);
-    return {
-      time: minutes * 60 + seconds,
-      text: match[3],
-    };
-  })
-  .filter(Boolean);
+// Parse timestamped lyrics ([m:ss] line); untimestamped lines are skipped.
+const lines = parseLyrics(lyrics);
 
 if (lines.length === 0) {
   console.error("Error: no timestamped lyrics found. Format: [m:ss] line");
   process.exit(1);
 }
 
-// Compute end times — each line displays until the next line starts
-const songDuration = meta.duration_seconds || lines[lines.length - 1].time + 5;
-const FADE = 0.4; // seconds of fade in/out
-const events = lines.map((line, i) => ({
-  start: line.time,
-  end: i < lines.length - 1 ? lines[i + 1].time : songDuration,
-  text: line.text,
-}));
-
-// Escape text for ffmpeg drawtext (single quotes, colons, percent signs, brackets)
-function escapeForDrawtext(s) {
-  return s
-    .replace(/\\/g, "\\\\\\\\")
-    .replace(/'/g, "\\\\\\'")
-    .replace(/:/g, "\\\\:")
-    .replace(/%/g, "\\\\%")
-    .replace(/,/g, "\\\\,")
-    .replace(/\[/g, "\\\\[")
-    .replace(/\]/g, "\\\\]");
-}
+// Compute display windows — each line shows until the next starts; the last
+// shows until the song's duration (falling back to last line + 5s).
+const events = buildEvents(lines, meta.duration_seconds);
 
 // Build the drawtext filter chain. Each line gets its own drawtext with
 // alpha-fade controlled by enable/between() and st/et fade.
