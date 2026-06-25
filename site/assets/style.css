@@ -842,6 +842,16 @@ ul li {
   opacity: 0.4;
   margin-top: 0.5rem;
 }
+/* Easter egg: the sector code is a hidden link. Inherits the dim transmission
+   styling so it doesn't read as clickable until you hover over it. */
+.transmission-signal {
+  color: inherit;
+  text-decoration: none;
+}
+.transmission-signal:hover {
+  color: var(--chrome);
+  text-shadow: 0 0 6px currentColor;
+}
 
 /* ---------- Utilities ---------- */
 
