@@ -17,14 +17,12 @@ const { listSongDirs } = require("./scripts/validate-metadata.js");
 // lib/ so they can be unit-tested without Eleventy. See test/eleventy-helpers.
 const {
   toAbsolute,
-  isoDuration,
   musicRecordingLd,
   musicAlbumLd,
-  releaseDates,
-  isReleased,
-  byLatestReleaseDesc,
   upcomingShows,
   pastShows,
+  buildSongsCollection,
+  prettyDate,
 } = require("./lib/eleventy-helpers.js");
 
 // Served from the root custom domain (galacticpanic.com), so no path prefix.
@@ -107,52 +105,12 @@ module.exports = function (eleventyConfig) {
     }
   }
 
-  // Build the songs collection from content/songs/*/metadata.json
+  // Build the songs collection from content/songs/*/metadata.json. The logic
+  // lives in lib/ (buildSongsCollection) so it's unit-tested; here we just
+  // pass today's date (UTC, YYYY-MM-DD), which gates future-dated tracks so
+  // the weekly rollout stays under wraps until each release day.
   eleventyConfig.addCollection("songs", function () {
-    if (!fs.existsSync(songsDir)) return [];
-
-    // Today (UTC, YYYY-MM-DD) — used to hide tracks whose release date
-    // hasn't arrived yet, so the weekly rollout stays under wraps.
-    const today = new Date().toISOString().slice(0, 10);
-
-    return listSongDirs(songsDir)
-      .map((name) => {
-        const metaPath = path.join(songsDir, name, "metadata.json");
-        if (!fs.existsSync(metaPath)) return null;
-        try {
-          const meta = JSON.parse(fs.readFileSync(metaPath, "utf8"));
-          const dates = releaseDates(meta);
-          const hasCover = fs.existsSync(
-            path.join(songsDir, name, "cover.png")
-          );
-          const lyricsPath = path.join(songsDir, name, "lyrics.txt");
-          const lyrics = fs.existsSync(lyricsPath)
-            ? fs.readFileSync(lyricsPath, "utf8")
-            : "";
-          return {
-            ...meta,
-            lyrics,
-            cover_url: hasCover ? `/assets/covers/${name}.png` : null,
-            // Filesystem path to the master cover, for the {% image %}
-            // shortcode to generate responsive variants from.
-            cover_src: hasCover
-              ? path.join(songsDir, name, "cover.png")
-              : null,
-            first_release_date: dates[0] || null,
-            latest_release_date: dates[dates.length - 1] || null,
-            has_pro_version: !!meta.release_date_spotify,
-            has_home_version: !!meta.release_date_bandcamp,
-          };
-        } catch (e) {
-          console.warn(`Skipping ${name}: invalid metadata.json (${e.message})`);
-          return null;
-        }
-      })
-      .filter(Boolean)
-      // Hide tracks whose release date is still in the future — they
-      // appear automatically once the build runs on/after their Friday.
-      .filter((s) => isReleased(s, today))
-      .sort(byLatestReleaseDesc);
+    return buildSongsCollection(songsDir, new Date().toISOString().slice(0, 10));
   });
 
   // Show filters — split a shows array into upcoming/past relative to the
@@ -164,16 +122,9 @@ module.exports = function (eleventyConfig) {
     pastShows(shows, new Date().toISOString().slice(0, 10))
   );
 
-  // Date filter — formats YYYY-MM-DD into a friendlier string
-  eleventyConfig.addFilter("prettyDate", (dateStr) => {
-    if (!dateStr) return "";
-    const d = new Date(dateStr + "T00:00:00");
-    return d.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  });
+  // Date filter — formats YYYY-MM-DD into a friendlier string (helper in lib/,
+  // so the timezone-anchoring is tested).
+  eleventyConfig.addFilter("prettyDate", prettyDate);
 
   return {
     pathPrefix: PATH_PREFIX,
