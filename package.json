@@ -10,7 +10,7 @@
     "dev": "eleventy --serve",
     "build": "eleventy",
     "clean": "rm -rf site/_site",
-    "validate": "node scripts/validate-metadata.js",
+    "validate": "node scripts/validate-metadata.js && node scripts/validate-products.js",
     "test": "node --test",
     "test:coverage": "node --test --experimental-test-coverage",
     "generate-all": "./scripts/generate-all.sh"

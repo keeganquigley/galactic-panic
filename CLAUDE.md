@@ -68,6 +68,22 @@ it exports its helpers, and `.eleventy.js` imports `listSongDirs` from it so the
 "which folders count as songs" rule (skip non-dirs and `_`-prefixed templates)
 is defined in exactly one place rather than restated in the build.
 
+## Store catalog
+
+The Store page (`site/store.njk`) is driven by `site/_data/products.js` — one
+entry per item (`id`, `name`, `image`, `alt`, `price`, `checkout_url`,
+`sold_out`). A product shows **Buy Now** (linking to its Square hosted-checkout
+URL) when `checkout_url` is set, **Sold Out** when `sold_out: true`, or **For
+Sale Soon** when `checkout_url` is null. Payments and inventory (max 30 per
+tee/CD) are handled by Square — the same Item Library that the in-person Square
+Reader draws down — so there is no backend or in-repo stock counter.
+
+After editing `products.js`, run `npm run validate` — it also runs
+`scripts/validate-products.js`, which catches the failure modes that ship a
+broken store (a non-https `checkout_url`, a missing image, a duplicate `id`, or
+a `sold_out` item that's still buyable). Its logic is unit-tested in
+`test/validate-products.test.js`, and CI runs the validator on every PR.
+
 ## Common tasks
 
 - **"Generate all assets for [slug]"** — Run scripts/generate-canvas.sh,
