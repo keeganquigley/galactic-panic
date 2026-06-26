@@ -6,6 +6,7 @@
 
 const { test } = require("node:test");
 const assert = require("node:assert/strict");
+const { spawnSync } = require("node:child_process");
 const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
@@ -73,6 +74,32 @@ test("slug must match the folder name", () => {
   assert.ok(errors.some((e) => /must match the folder name/.test(e)));
 });
 
+test("a non-string where a string is required is reported", () => {
+  const meta = validMeta();
+  meta.title = 42; // a string field given a number
+  meta.key = null; // and a non-nullable string given null
+  const dir = makeSongsDir({ "time-machine": meta });
+  const errors = validateSong(dir, "time-machine");
+  assert.ok(errors.some((e) => /"title" must be a string \(got 42\)/.test(e)));
+  assert.ok(errors.some((e) => /"key" must be a string \(got null\)/.test(e)));
+});
+
+test("credits must be an object — null and arrays are rejected", () => {
+  const asNull = validMeta();
+  asNull.credits = null;
+  const dirNull = makeSongsDir({ "time-machine": asNull });
+  assert.ok(
+    validateSong(dirNull, "time-machine").some((e) => /"credits" must be an object/.test(e))
+  );
+
+  const asArray = validMeta();
+  asArray.credits = [];
+  const dirArray = makeSongsDir({ "time-machine": asArray });
+  assert.ok(
+    validateSong(dirArray, "time-machine").some((e) => /"credits" must be an object/.test(e))
+  );
+});
+
 test("bad types and formats are reported per-field", () => {
   const meta = validMeta();
   meta.bpm = "120"; // string, not number
@@ -116,4 +143,37 @@ test("validateAll aggregates errors across songs", () => {
   assert.deepEqual(songDirs.sort(), ["patti-russell", "time-machine"]);
   assert.equal(errors.length, 1);
   assert.match(errors[0], /^patti-russell\/metadata\.json: invalid JSON/);
+});
+
+// The CLI entrypoint (`npm run validate`, and the CI gate) — run the script as
+// a subprocess pointed at a temp SONGS_DIR and assert exit code + output. This
+// is the actual contract CI depends on, so it's worth exercising end-to-end.
+const CLI = path.join(__dirname, "..", "scripts", "validate-metadata.js");
+function runCli(songsDir) {
+  const res = spawnSync(process.execPath, [CLI], {
+    env: { ...process.env, SONGS_DIR: songsDir },
+    encoding: "utf8",
+  });
+  return { status: res.status, stdout: res.stdout, stderr: res.stderr };
+}
+
+test("CLI exits 0 and reports the count when every song is valid", () => {
+  const dir = makeSongsDir({ "time-machine": validMeta() });
+  const { status, stdout } = runCli(dir);
+  assert.equal(status, 0);
+  assert.match(stdout, /metadata valid — 1 song checked \(time-machine\)/);
+});
+
+test("CLI exits 1 and prints the issues when a song is invalid", () => {
+  const dir = makeSongsDir({ "patti-russell": '{ bad json' });
+  const { status, stderr } = runCli(dir);
+  assert.equal(status, 1);
+  assert.match(stderr, /metadata validation failed \(1 issue\)/);
+  assert.match(stderr, /patti-russell\/metadata\.json: invalid JSON/);
+});
+
+test("CLI exits 1 when the songs directory does not exist", () => {
+  const { status, stderr } = runCli(path.join(os.tmpdir(), "gp-does-not-exist-xyz"));
+  assert.equal(status, 1);
+  assert.match(stderr, /No songs directory at/);
 });
