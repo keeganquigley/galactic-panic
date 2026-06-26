@@ -8,48 +8,31 @@ permalink: /store/
 <p class="eyebrow">Galactic Panic merch — incoming transmission</p>
 
 <p>
-  Merch is inbound. Nothing's for sale just yet, but here's what's coming down
-  the wire. Check back soon, Earthling.
+  Merch is incoming. Grab it while supplies last — only 30 of each tee and CD
+  exist in this sector of the galaxy. Checkout is handled securely by Square.
 </p>
 
 <div class="store-grid">
+  {% for p in products %}
   <div class="product-card">
     <div class="product-art">
-      {% image "site/assets/store/shirt-black.png", "Galactic Panic T-shirt, black", "(max-width: 600px) 45vw, 320px" %}
+      {% image p.image, p.alt, "(max-width: 600px) 45vw, 320px" %}
     </div>
     <div class="product-body">
-      <div class="product-name">T-Shirt — Black</div>
-      <div class="product-soon">For Sale Soon</div>
+      <div class="product-name">{{ p.name }}</div>
+      {% if p.sold_out %}
+        <div class="product-soldout">Sold Out</div>
+      {% elif p.checkout_url %}
+        <span class="product-price">{{ p.price }}</span>
+        <a class="product-buy-now"
+           href="{{ p.checkout_url }}"
+           target="_blank"
+           rel="noopener"
+           data-goatcounter-click="buy-{{ p.id }}">Buy Now</a>
+      {% else %}
+        <div class="product-soon">For Sale Soon</div>
+      {% endif %}
     </div>
   </div>
-
-  <div class="product-card">
-    <div class="product-art">
-      {% image "site/assets/store/shirt-white.png", "Galactic Panic T-shirt, white", "(max-width: 600px) 45vw, 320px" %}
-    </div>
-    <div class="product-body">
-      <div class="product-name">T-Shirt — White</div>
-      <div class="product-soon">For Sale Soon</div>
-    </div>
-  </div>
-
-  <div class="product-card">
-    <div class="product-art">
-      {% image "site/assets/store/sticker.png", "Galactic Panic stickers", "(max-width: 600px) 45vw, 320px" %}
-    </div>
-    <div class="product-body">
-      <div class="product-name">Stickers</div>
-      <div class="product-soon">For Sale Soon</div>
-    </div>
-  </div>
-
-  <div class="product-card">
-    <div class="product-art">
-      {% image "site/assets/store/cd.jpg", "Galactic Panic CD", "(max-width: 600px) 45vw, 320px" %}
-    </div>
-    <div class="product-body">
-      <div class="product-name">CD</div>
-      <div class="product-soon">For Sale Soon</div>
-    </div>
-  </div>
+  {% endfor %}
 </div>

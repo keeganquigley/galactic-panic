@@ -579,6 +579,42 @@ ul li {
   font-weight: 700;
   white-space: nowrap;
 }
+.product-soldout {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--chrome);
+  background: var(--warning-red);
+  padding: 2px 8px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.product-price {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--chrome-dim);
+  margin-left: auto;
+}
+.product-buy-now {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--void);
+  background: var(--ray-green);
+  border: 1px solid var(--ray-green);
+  padding: 6px 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: box-shadow 0.15s ease, background 0.15s ease;
+}
+.product-buy-now:hover,
+.product-buy-now:focus {
+  background: var(--chrome);
+  box-shadow: 0 0 12px var(--ray-green);
+}
 
 /* ---------- Shows ---------- */
 
