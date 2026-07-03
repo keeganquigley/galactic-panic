@@ -38,6 +38,7 @@ This repo handles two things:
   "isrc": "string or null",
   "spotify_url": "string or null",
   "bandcamp_url": "string or null",
+  "apple_music_url": "string or null",
   "duration_seconds": 0,
   "bpm": 0,
   "key": "string (e.g. 'E minor')",

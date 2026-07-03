@@ -107,6 +107,7 @@ function song(extra = {}) {
     latest_release_date: "2026-06-19",
     spotify_url: "https://open.spotify.com/track/x",
     bandcamp_url: "https://galacticpanic.bandcamp.com/track/time-machine",
+    apple_music_url: "https://music.apple.com/us/album/time-machine-single/6782485195",
     cover_url: "/assets/covers/time-machine.png",
     story: "A song.",
     credits: { writing: "Alice, Bob" },
@@ -122,7 +123,7 @@ test("musicRecordingLd builds a well-formed MusicRecording", () => {
   assert.equal(ld.isrcCode, "QT6E72633975");
   assert.equal(ld.datePublished, "2026-06-19");
   assert.equal(ld.image, "https://galacticpanic.com/assets/covers/time-machine.png");
-  assert.deepEqual(ld.sameAs, [song().spotify_url, song().bandcamp_url]);
+  assert.deepEqual(ld.sameAs, [song().spotify_url, song().bandcamp_url, song().apple_music_url]);
 });
 
 test("musicRecordingLd splits writing credits into composer Persons", () => {
@@ -142,7 +143,7 @@ test("musicRecordingLd prefers latest over first release date", () => {
 
 test("musicRecordingLd omits duration/isrc/sameAs when absent", () => {
   const ld = JSON.parse(
-    musicRecordingLd(song({ duration_seconds: 0, isrc: null, spotify_url: null, bandcamp_url: null }))
+    musicRecordingLd(song({ duration_seconds: 0, isrc: null, spotify_url: null, bandcamp_url: null, apple_music_url: null }))
   );
   assert.equal("duration" in ld, false);
   assert.equal("isrcCode" in ld, false);
