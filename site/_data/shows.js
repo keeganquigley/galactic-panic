@@ -7,8 +7,8 @@ module.exports = [
     date: "2026-06-27",
     name: "Barn Show",
     city: "Allegan, MI",
-    ticket_url: "https://www.facebook.com/events/1323241569996096/",
-    details: "Address on the event page",
+    ticket_url: null,
+    details: null,
   },
   {
     date: "2026-07-07",
