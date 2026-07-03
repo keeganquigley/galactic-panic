@@ -33,6 +33,7 @@ eleventyComputed:
     <div class="song-listen">
       {% if song.spotify_url %}<a href="{{ song.spotify_url }}">Spotify</a>{% endif %}
       {% if song.bandcamp_url %}<a href="{{ song.bandcamp_url }}">Bandcamp</a>{% endif %}
+      {% if song.apple_music_url %}<a href="{{ song.apple_music_url }}">Apple Music</a>{% endif %}
     </div>
 
     {% if song.instruments_played and song.instruments_played.length > 0 %}

@@ -30,6 +30,7 @@ description: ""
     <div class="song-listen">
       {% if latest.spotify_url %}<a href="{{ latest.spotify_url }}">Spotify</a>{% endif %}
       {% if latest.bandcamp_url %}<a href="{{ latest.bandcamp_url }}">Bandcamp</a>{% endif %}
+      {% if latest.apple_music_url %}<a href="{{ latest.apple_music_url }}">Apple Music</a>{% endif %}
       <a href="/songs/{{ latest.slug }}/">More about this song</a>
     </div>
   </div>

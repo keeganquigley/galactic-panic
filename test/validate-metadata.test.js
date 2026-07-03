@@ -23,6 +23,7 @@ function validMeta(slug = "time-machine") {
     isrc: "QT6E72633975",
     spotify_url: "https://open.spotify.com/track/0uG3i7Dc76jx0VukKOHzy3",
     bandcamp_url: "https://galacticpanic.bandcamp.com/track/time-machine",
+    apple_music_url: "https://music.apple.com/us/album/time-machine-single/6782485195",
     duration_seconds: 0,
     bpm: 100,
     key: "E major",

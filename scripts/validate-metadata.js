@@ -87,6 +87,7 @@ function validateSong(songsDir, dirName) {
 
   checkUrl(fail, meta, "spotify_url");
   checkUrl(fail, meta, "bandcamp_url");
+  checkUrl(fail, meta, "apple_music_url");
 
   checkNumber(fail, meta, "duration_seconds");
   checkNumber(fail, meta, "bpm");
