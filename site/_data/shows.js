@@ -14,8 +14,8 @@ module.exports = [
     date: "2026-07-07",
     name: "Park Theatre Open Mic",
     city: "Holland, MI",
-    ticket_url: "https://parktheatreholland.org/",
-    details: "248 S River Ave, Holland, MI 49423",
+    ticket_url: null,
+    details: null,
   },
   {
     date: "2026-07-11",
