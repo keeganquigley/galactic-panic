@@ -109,7 +109,6 @@ function song(extra = {}) {
     bandcamp_url: "https://galacticpanic.bandcamp.com/track/time-machine",
     apple_music_url: "https://music.apple.com/us/album/time-machine-single/6782485195",
     cover_url: "/assets/covers/time-machine.png",
-    story: "A song.",
     credits: { writing: "Alice, Bob" },
     ...extra,
   };
@@ -151,11 +150,11 @@ test("musicRecordingLd omits duration/isrc/sameAs when absent", () => {
 });
 
 test("musicRecordingLd escapes < so it can't break out of a <script> tag", () => {
-  const raw = musicRecordingLd(song({ story: "</script><script>alert(1)" }));
+  const raw = musicRecordingLd(song({ title: "</script><script>alert(1)" }));
   assert.equal(raw.includes("</script>"), false);
   assert.ok(raw.includes("\\u003c"));
   // still valid JSON that round-trips to the original text
-  assert.equal(JSON.parse(raw).description, "</script><script>alert(1)");
+  assert.equal(JSON.parse(raw).name, "</script><script>alert(1)");
 });
 
 // --- musicAlbumLd ----------------------------------------------------------
@@ -235,12 +234,11 @@ test("musicGroup lists profile links in sameAs but drops the mailto:", () => {
 
 // --- musicRecordingLd (absent-field branches) ------------------------------
 
-test("musicRecordingLd omits image/description/recordingOf when those fields are absent", () => {
+test("musicRecordingLd omits image/recordingOf when those fields are absent", () => {
   const ld = JSON.parse(
-    musicRecordingLd(song({ cover_url: null, story: "", credits: {} }))
+    musicRecordingLd(song({ cover_url: null, credits: {} }))
   );
   assert.equal("image" in ld, false);
-  assert.equal("description" in ld, false);
   assert.equal("recordingOf" in ld, false);
 });
 

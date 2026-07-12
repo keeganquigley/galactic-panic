@@ -9,7 +9,6 @@
   "duration_seconds": 0,
   "bpm": 0,
   "key": "E minor",
-  "story": "The behind-the-song blurb. What it's about, where it came from, why you wrote it. This appears on the song page on the website and gets reused for press materials and social posts.",
   "instruments_played": ["guitar", "bass", "drums", "vocals"],
   "credits": {
     "writing": "",

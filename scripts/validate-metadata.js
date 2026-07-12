@@ -93,7 +93,6 @@ function validateSong(songsDir, dirName) {
   checkNumber(fail, meta, "bpm");
 
   checkStr(fail, meta, "key");
-  checkStr(fail, meta, "story");
 
   if (!Array.isArray(meta.instruments_played) || !meta.instruments_played.every((i) => typeof i === "string")) {
     fail(`"instruments_played" must be an array of strings (got ${JSON.stringify(meta.instruments_played)})`);
