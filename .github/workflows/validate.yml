@@ -19,5 +19,8 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-      - run: node scripts/validate-metadata.js
-      - run: node --test
+      # Run through the npm scripts so package.json stays the single source of
+      # truth for how these checks invoke (matching the deploy workflow). No
+      # `npm ci` needed: the validator and tests are zero-dependency by design.
+      - run: npm run validate
+      - run: npm test

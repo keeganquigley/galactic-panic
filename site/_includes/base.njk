@@ -1,3 +1,4 @@
+{% import "saucer.njk" as ui -%}
 <!doctype html>
 <html lang="en">
 <head>
@@ -42,7 +43,7 @@
   <header class="site-header">
     <div class="header-inner">
       <a href="/" class="brand">
-        <svg class="saucer-icon-sm" viewBox="0 0 64 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><ellipse cx="32" cy="18" rx="30" ry="10" fill="currentColor" opacity="0.3"/><ellipse cx="32" cy="16" rx="22" ry="7" fill="currentColor" opacity="0.5"/><ellipse cx="32" cy="13" rx="10" ry="6" fill="currentColor" opacity="0.7"/></svg>
+        {{ ui.saucer("saucer-icon-sm") }}
         <span class="brand-name">{{ artist.name }}</span>
       </a>
       <nav class="site-nav">
@@ -63,7 +64,7 @@
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-name">
-        <svg class="saucer-icon-sm" viewBox="0 0 64 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="vertical-align: middle; margin-right: 0.5em;"><ellipse cx="32" cy="18" rx="30" ry="10" fill="currentColor" opacity="0.3"/><ellipse cx="32" cy="16" rx="22" ry="7" fill="currentColor" opacity="0.5"/><ellipse cx="32" cy="13" rx="10" ry="6" fill="currentColor" opacity="0.7"/></svg>
+        {{ ui.saucer("saucer-icon-sm", "vertical-align: middle; margin-right: 0.5em;") }}
         {{ artist.project }}
       </div>
       <div class="footer-links">

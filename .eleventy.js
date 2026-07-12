@@ -6,7 +6,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { EleventyHtmlBasePlugin } = require("@11ty/eleventy");
+const { EleventyHtmlBasePlugin, EleventyRenderPlugin } = require("@11ty/eleventy");
 const Image = require("@11ty/eleventy-img");
 // Reuse the validator's directory lister so "which folders are songs" (skip
 // non-dirs and _-prefixed templates) is defined in exactly one place. The
@@ -34,6 +34,12 @@ module.exports = function (eleventyConfig) {
   // Rewrites root-absolute URLs in output HTML to include the pathPrefix,
   // so /assets/... and /music/ resolve correctly under the project subpath.
   eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
+
+  // RenderPlugin gives us {% renderFile %}, an async-aware way to include a
+  // partial. Plain Nunjucks {% include %} is synchronous and renders empty
+  // when the partial calls an async shortcode like {% image %} — which the
+  // shared song-card partial does — so we render it through this instead.
+  eleventyConfig.addPlugin(EleventyRenderPlugin);
 
   // Responsive image shortcode. Generates resized AVIF/WebP/JPEG variants
   // with a srcset so browsers download an appropriately sized file instead
