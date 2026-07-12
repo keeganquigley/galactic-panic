@@ -13,19 +13,7 @@ albumJsonLd: true
 {% if songs.length > 0 %}
 <div class="songs-grid">
   {% for song in songs %}
-    <a href="/songs/{{ song.slug }}/" class="song-card">
-      <div class="song-card-art">
-        {% if song.cover_src %}{% image song.cover_src, "", "(max-width: 600px) 45vw, 300px" %}{% endif %}
-      </div>
-      <div class="song-card-body">
-        <div class="song-card-title">{{ song.title }}</div>
-        <div class="song-card-meta">
-          {% if song.latest_release_date %}{{ song.latest_release_date | prettyDate }}{% else %}Unreleased{% endif %}
-          {% if song.has_pro_version %}<span class="song-card-tag">Spotify</span>{% endif %}
-          {% if song.has_home_version and not song.has_pro_version %}<span class="song-card-tag">Bandcamp</span>{% endif %}
-        </div>
-      </div>
-    </a>
+    {% renderFile "./site/_includes/song-card.njk", { song: song } %}
   {% endfor %}
 </div>
 {% else %}

@@ -4,9 +4,10 @@ title: Galactic Panic
 description: ""
 ---
 
+{% import "saucer.njk" as ui -%}
 <section class="hero">
   <div class="hero-eyebrow">/// incoming transmission /// est. 2026</div>
-  <svg class="saucer-icon" viewBox="0 0 64 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-bottom: 1rem; opacity: 0.6;"><ellipse cx="32" cy="18" rx="30" ry="10" fill="currentColor" opacity="0.3"/><ellipse cx="32" cy="16" rx="22" ry="7" fill="currentColor" opacity="0.5"/><ellipse cx="32" cy="13" rx="10" ry="6" fill="currentColor" opacity="0.7"/></svg>
+  {{ ui.saucer("saucer-icon", "margin-bottom: 1rem; opacity: 0.6;") }}
   <h1 class="hero-title">{{ artist.name }}</h1>
   <p class="hero-tagline">{% if artist.tagline %}{{ artist.tagline }}{% else %}Do not adjust your receiver.{% endif %}</p>
 </section>
@@ -47,19 +48,7 @@ description: ""
   <h2>More music</h2>
   <div class="songs-grid">
     {% for song in songs.slice(1, 7) %}
-      <a href="/songs/{{ song.slug }}/" class="song-card">
-        <div class="song-card-art">
-          {% if song.cover_src %}{% image song.cover_src, "", "(max-width: 600px) 45vw, 300px" %}{% endif %}
-        </div>
-        <div class="song-card-body">
-          <div class="song-card-title">{{ song.title }}</div>
-          <div class="song-card-meta">
-            {{ song.latest_release_date | prettyDate }}
-            {% if song.has_pro_version %}<span class="song-card-tag">Spotify</span>{% endif %}
-            {% if song.has_home_version and not song.has_pro_version %}<span class="song-card-tag">Bandcamp</span>{% endif %}
-          </div>
-        </div>
-      </a>
+      {% renderFile "./site/_includes/song-card.njk", { song: song } %}
     {% endfor %}
   </div>
 </section>
