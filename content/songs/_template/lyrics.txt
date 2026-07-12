@@ -1,8 +1,6 @@
-[0:00] First line of lyrics
-[0:04] Second line
-[0:09] Third line
+First line of lyrics
+Second line
+Third line
 
-# One line per line. Prefix each with a [m:ss] or [mm:ss] timestamp marking
-# when it should appear — the lyric-video generator uses these to sync text
-# to the audio. Lines without a timestamp (like this note) are ignored by the
-# generator, so you can use them as section markers in your working copy.
+Leave a blank line between verses — the song page preserves it as a gap.
+The site renders this file verbatim in the "Lyrics" section (skipped when empty).

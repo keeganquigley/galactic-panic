@@ -1,8 +1,12 @@
 # Galactic Panic — project context
 
-This repo handles two things:
-1. Content asset generation for music releases (Canvas, Shorts, visualizers, lyric videos)
-2. The Galactic Panic website hosted on GitHub Pages (built with Eleventy)
+This repo is the **Galactic Panic band website**: a static site built with
+Eleventy (11ty) and hosted on GitHub Pages at https://galacticpanic.com.
+Plain HTML/CSS/JS output — no SPA framework.
+
+(Content-asset generation — Canvas, Shorts, visualizers, lyric videos — used to
+live here too and has been split out into a separate repo. This repo is the
+website only.)
 
 ## Brand
 
@@ -13,19 +17,15 @@ This repo handles two things:
 
 ## Conventions
 
-- Each song lives in `content/songs/[slug]/`.
-- Required files per song: `metadata.json`, `cover.png` (3000x3000), at least one
-  master file (`master-home.wav` or `master-pro.wav`).
-- Lyrics live in `lyrics.txt` (one line per line, each prefixed with a `[m:ss]`
-  timestamp for lyric-video sync), not in `metadata.json`. The site renders
-  `lyrics.txt` verbatim in a "Lyrics" section on the song page when non-empty,
-  so it doubles as the on-site lyric source.
-- Optional: `loop.mp4` (source video for short-form generation).
-- Generated assets go in `content/songs/[slug]/output/` — not committed beyond a
-  manifest.
-- Site is built with Eleventy (11ty), plain HTML/CSS/JS output. No SPA framework.
-- Use ffmpeg for all video work; prefer libx264, AAC audio, yuv420p pixel format,
-  `+faststart` for web playback.
+- Each song lives in `content/songs/[slug]/` and is the site's data source.
+- Required files per song: `metadata.json` and `cover.png` (3000x3000 — Eleventy
+  generates resized/responsive variants at build time).
+- Lyrics live in `lyrics.txt`, one line per line. The site renders `lyrics.txt`
+  verbatim in a "Lyrics" section on the song page when non-empty. Blank lines
+  are preserved as gaps between verses.
+- `content/songs/_template/` is a copy-me starting point for a new song. Folders
+  whose name starts with `_` are skipped by the build.
+- The build output goes to `site/_site/` (git-ignored).
 
 ## metadata.json schema
 
@@ -42,7 +42,6 @@ This repo handles two things:
   "duration_seconds": 0,
   "bpm": 0,
   "key": "string (e.g. 'E minor')",
-  "story": "string — the behind-the-song blurb, used on song page and press materials",
   "instruments_played": ["guitar", "bass", "drums", "vocals", "..."],
   "credits": {
     "writing": "",
@@ -71,19 +70,10 @@ is defined in exactly one place rather than restated in the build.
 
 ## Common tasks
 
-- **"Generate all assets for [slug]"** — Run scripts/generate-canvas.sh,
-  scripts/generate-shorts.sh, scripts/generate-visualizer.sh for that slug.
-  Generate a lyric video from `lyrics.txt`. Write a `manifest.json` in the
-  output folder listing every file with dimensions and duration. The lyric
-  video picks a font per-platform (macOS/Linux); override with the `FONT_PATH`
-  env var to use a specific font file.
-- **"Add a new song page to the site for [slug]"** — Create
-  `site/songs/[slug].md` from the template, ensure metadata.json is in the
-  data pipeline. Eleventy will pick it up automatically.
-- **"Update homepage with latest release"** — Edit the Eleventy template to
-  feature the most recent release.
-
-## Things to NEVER do
-
-- Don't commit master WAVs to git — they're large and don't belong in version
-  control. Keep them on the local filesystem; use the manifest for tracking.
+- **"Add a new song to the site for [slug]"** — Copy `content/songs/_template/`
+  to `content/songs/[slug]/`, fill in `metadata.json`, drop in `cover.png` and
+  (optionally) `lyrics.txt`. Run `npm run validate`, then `npm run dev` and
+  confirm the page renders at `/songs/[slug]/`. Eleventy picks it up
+  automatically.
+- **"Update homepage with latest release"** — Edit the Eleventy template
+  (`site/index.njk`) to feature the most recent release.

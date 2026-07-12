@@ -2,7 +2,7 @@
   "name": "galactic-panic",
   "version": "0.1.0",
   "private": true,
-  "description": "Website and content asset generation for Galactic Panic",
+  "description": "The Galactic Panic band website (Eleventy, hosted on GitHub Pages)",
   "engines": {
     "node": ">=22"
   },
@@ -12,8 +12,7 @@
     "clean": "rm -rf site/_site",
     "validate": "node scripts/validate-metadata.js",
     "test": "node --test",
-    "test:coverage": "node --test --experimental-test-coverage",
-    "generate-all": "./scripts/generate-all.sh"
+    "test:coverage": "node --test --experimental-test-coverage"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",
