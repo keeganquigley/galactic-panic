@@ -1,7 +1,7 @@
 # 🚀 Galactic Panic
 
-The infrastructure repo for Galactic Panic — content asset generation for
-releases, plus the band website.
+The band website for Galactic Panic — a static site built with
+[Eleventy](https://www.11ty.dev/) and hosted on GitHub Pages.
 
 **Live site:** https://galacticpanic.com
 
@@ -13,46 +13,58 @@ releases, plus the band website.
 # install dependencies
 npm install
 
-# spin up the website locally
+# serve the site locally with live reload (http://localhost:8080)
 npm run dev
 
-# generate release assets for a song
-./scripts/generate-all.sh [song-slug]
+# production build (outputs to site/_site/)
+npm run build
 ```
 
 ## Structure
 
 ```
-content/songs/[slug]/         # one folder per song
-  metadata.json               # song info, credits
-  lyrics.txt                  # timestamped lyrics ([m:ss] per line)
-  cover.png                   # 3000x3000 cover art
-  master-home.wav             # self-mixed master
-  master-pro.wav              # professionally mixed master
-  loop.mp4                    # source video for short-form content
-  output/                     # generated assets (Canvas, Shorts, etc.)
+content/songs/[slug]/     # one folder per song — the site's data source
+  metadata.json           # song info, links, credits (see schema in CLAUDE.md)
+  lyrics.txt              # lyrics, rendered verbatim on the song page
+  cover.png               # cover art (3000x3000 master; resized at build time)
 
-scripts/                      # ffmpeg + bundling automation
-site/                         # Eleventy site (GitHub Pages output)
-CLAUDE.md                     # context for Claude Code
+site/                     # Eleventy source (templates, data, assets, CSS)
+site/_site/               # build output (git-ignored)
+lib/eleventy-helpers.js   # build helpers (structured data, dates, etc.)
+scripts/validate-metadata.js  # metadata schema validator (run in CI + build)
+.eleventy.js              # Eleventy config
+CLAUDE.md                 # project context and conventions
 ```
 
-## Workflow
+## Adding or editing a song
 
-See `CLAUDE.md` for the canonical workflow and conventions. Short version:
+1. Create `content/songs/[slug]/` with `metadata.json`, `cover.png`, and
+   (optionally) `lyrics.txt`. Copy `content/songs/_template/` as a starting
+   point.
+2. Run `npm run validate` to check the metadata against the schema. **This
+   matters:** an invalid `metadata.json` makes Eleventy *silently skip* that
+   song, so CI runs the same check on every PR and before each deploy.
+3. `npm run dev` and confirm the song page renders at `/songs/[slug]/`.
 
-1. Finish a song.
-2. Drop master + cover + metadata into `content/songs/[slug]/`.
-3. Shoot a `loop.mp4` (performance footage, b-roll — vertical 9:16 ideally).
-4. Run `./scripts/generate-all.sh [slug]` to produce all release assets.
-5. Upload to streaming platforms.
+The `metadata.json` schema and full conventions live in
+[CLAUDE.md](CLAUDE.md).
 
-## Dependencies
+## Deployment
 
-- ffmpeg (for video generation)
-- node 18+ (for Eleventy)
-- imagemagick (optional, for cover art resizing)
+Pushing to `main` triggers `.github/workflows/deploy.yml`, which validates,
+tests, builds, and publishes to GitHub Pages. A daily scheduled rebuild also
+runs so date-based content (past shows, scheduled releases) updates without a
+manual push.
+
+## Tests
 
 ```bash
-brew install ffmpeg node imagemagick   # macOS
+npm test              # run the unit tests (Node's built-in test runner, no deps)
+npm run test:coverage # with coverage
 ```
+
+## Requirements
+
+- Node 22+
+```
+
