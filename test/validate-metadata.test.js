@@ -27,7 +27,6 @@ function validMeta(slug = "time-machine") {
     duration_seconds: 0,
     bpm: 100,
     key: "E major",
-    story: "Jimmy tears a hole in the space-time continuum.",
     instruments_played: ["guitar", "bass", "drums", "vocals"],
     credits: { writing: "all", performance: "all", mix_home: "", mix_pro: "Ryan Elvert", master: "" },
   };

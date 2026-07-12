@@ -7,7 +7,7 @@ pagination:
 permalink: "/songs/{{ song.slug }}/"
 eleventyComputed:
   title: "{{ song.title }}"
-  description: "{% if song.story %}{{ song.story }}{% else %}{{ artist.tagline }}{% endif %}"
+  description: "{{ artist.tagline }}"
   socialImage: "{{ song.cover_url }}"
   ogType: "music.song"
 ---
@@ -26,15 +26,18 @@ eleventyComputed:
     </div>
     <h1>{{ song.title }}</h1>
 
-    {% if song.story %}
-      <p>{{ song.story }}</p>
-    {% endif %}
-
     <div class="song-listen">
       {% if song.spotify_url %}<a href="{{ song.spotify_url }}">Spotify</a>{% endif %}
       {% if song.bandcamp_url %}<a href="{{ song.bandcamp_url }}">Bandcamp</a>{% endif %}
       {% if song.apple_music_url %}<a href="{{ song.apple_music_url }}">Apple Music</a>{% endif %}
     </div>
+
+    {% if song.lyrics | trim %}
+      <section class="song-lyrics">
+        <h2>Lyrics</h2>
+        <div class="lyrics-body">{{ song.lyrics }}</div>
+      </section>
+    {% endif %}
 
     {% if song.instruments_played and song.instruments_played.length > 0 %}
       <p class="eyebrow" style="margin-top: 2rem;">
@@ -62,12 +65,5 @@ eleventyComputed:
     {% endif %}
   </div>
 </article>
-
-{% if song.lyrics | trim %}
-  <section class="song-lyrics">
-    <h2>Lyrics</h2>
-    <div class="lyrics-body">{{ song.lyrics }}</div>
-  </section>
-{% endif %}
 
 <p style="margin-top: 3rem;"><a href="/music/">← All music</a></p>

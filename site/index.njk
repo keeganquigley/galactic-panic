@@ -26,7 +26,6 @@ description: ""
   <div>
     <div class="latest-release-meta">Latest release · {{ latest.latest_release_date | prettyDate }}</div>
     <h2>{{ latest.title }}</h2>
-    {% if latest.story %}<p>{{ latest.story }}</p>{% endif %}
     <div class="song-listen">
       {% if latest.spotify_url %}<a href="{{ latest.spotify_url }}">Spotify</a>{% endif %}
       {% if latest.bandcamp_url %}<a href="{{ latest.bandcamp_url }}">Bandcamp</a>{% endif %}
