@@ -21,7 +21,7 @@ module.exports = [
     date: "2026-07-11",
     name: "The Philmore South",
     city: "Grand Rapids, MI",
-    ticket_url: "https://thephilmore.com/upcoming-1",
-    details: "4318 Division Ave S, Grand Rapids, MI 49548",
+    ticket_url: null,
+    details: null,
   },
 ];
