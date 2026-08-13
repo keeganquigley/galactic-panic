@@ -7,7 +7,9 @@
 const fs = require("fs");
 const path = require("path");
 const { EleventyHtmlBasePlugin, EleventyRenderPlugin } = require("@11ty/eleventy");
-const Image = require("@11ty/eleventy-img");
+// eleventy-img is ESM-only as of v7; require(esm) yields the module namespace,
+// so the callable Image() lives on `.default` (it also carries .generateHTML).
+const Image = require("@11ty/eleventy-img").default;
 // Reuse the validator's directory lister so "which folders are songs" (skip
 // non-dirs and _-prefixed templates) is defined in exactly one place. The
 // validator is the schema's source of truth; importing it can't double-run
